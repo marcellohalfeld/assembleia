@@ -338,8 +338,9 @@ Este módulo faz parte da plataforma Blatt. As decisões que valem para todos os
 repositório **marcellohalfeld/assembleia** (ADRs `PLAT-NNNN` e o resumo `docs/PLATAFORMA.md`).
 Leia o resumo antes de qualquer decisão de arquitetura; não copie ADRs nem o resumo para cá.
 
-- ADRs deste módulo usam o prefixo do módulo (`FOLHA-`, `ASP-`, `OPER-`); "ADR NNNN" sem
-  prefixo em texto antigo é o número de origem na folha (tabela no `assembleia`).
+- ADRs deste módulo ficam em `docs/adr/`, com o prefixo do módulo (`FOLHA-`, `ASP-`, `OPER-`)
+  nos índices e citações. "ADR NNNN" sem prefixo em texto anterior a 03/11/2026 é o número de
+  origem no repositório onde foi escrito (tabela de correspondência no `assembleia`).
 - **Não altere decisão de plataforma neste repositório.** Se o trabalho daqui exigir mudar
   uma regra `PLAT-`, registre em `docs/PENDENCIAS.md` e abra a proposta no `assembleia`.
   Divergência só para este módulo é ADR própria, citando a regra `PLAT-` que altera.
@@ -353,7 +354,8 @@ Leia o resumo antes de qualquer decisão de arquitetura; não copie ADRs nem o r
 - Integração por fatos: `outbox` na mesma transação do dado, `inbox` idempotente; os schemas
   dos fatos que este módulo publica ficam aqui, em `contratos/eventos/`, e são listados no
   índice do `assembleia`.
-- Dado pessoal fica só no módulo que o usa e não vai nos fatos publicados (PLAT-0014, item 9).
+- Dado pessoal fica só no módulo que o usa e não vai nos fatos publicados; do cadastro, guardar
+  só empresa e quadro societário (PLAT-0014, item 9).
 - `blatt.comum` é cópia sem alteração do `assembleia` (`comum/`), conferida pelo manifesto.
 - Parâmetros legais em `parametros/` com o contrato da PLAT-0003.
 - `Decimal` com arredondamento explícito, nunca `float`; nunca `eval`/`exec`; regra com base

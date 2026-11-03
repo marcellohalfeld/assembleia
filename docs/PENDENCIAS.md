@@ -65,6 +65,20 @@ repositório dele.
   dos dois módulos já as siga. Vale revisar quais podem ser aceitas, a começar pela PLAT-0014,
   de que dependem o aspirador (ASP-0005) e o orquestrador.
 
+### A-07. `blatt.infra` também é copiado, e as cópias já divergem
+
+- **Contexto:** além do `comum`, o aspirador copiou `src/blatt/infra/` da folha (commit
+  `660979f`) e acrescentou duas extensões compatíveis: migrações por pacote
+  (`postgres/migracoes.py`) e `dsn_modulo()` (`configuracao.py`). Em 03/11/2026, esses dois
+  arquivos diferem entre os repositórios; os demais são iguais. O aspirador registra isso como a
+  pendência P-20 dele.
+- **Por que é de plataforma:** o executor de migrações e a leitura de configuração por módulo
+  (PLAT-0014, itens 2 e 11) vão ser usados também pelo orquestrador, que tem banco próprio.
+- **Proposta:** tratar como o `comum`: fonte canônica aqui (a versão estendida do aspirador,
+  depois de conferida contra os testes da folha), manifesto e conferência; folha e aspirador
+  passam a copiar daqui.
+- **Bloqueia:** o banco do orquestrador, se ele for reaproveitar o executor de migrações.
+
 ## Resolvidas
 
 Nenhuma ainda.
