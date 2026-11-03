@@ -1,0 +1,9 @@
+{
+  "origem": "marcellohalfeld/blatt, src/blatt/comum, commit 2bcff8e (idêntico ao aspirador em 03/11/2026)",
+  "arquivos": {
+    "__init__.py": "25f8029063a26c3b5f2c566a55f6bb77572e32e38d80c322dfdd68de11f34e10",
+    "documentos.py": "17d13efa3bd6847ce0bdf1de21b59b520eb86a52c4d83642196684225a6236f7",
+    "periodo.py": "7942587c3c3c45a05321c15b6cbd6d53c9753e8b12a19e494e3973b2e7b100de",
+    "texto.py": "5ddc1c80e3c7a2ef3e9e4aa69b9044e5d3d8f8086012922333951673394a5de3"
+  }
+}
