@@ -19,12 +19,12 @@ Regras (PLAT-0015):
 | [PLAT-0002](PLAT-0002-arquitetura-hexagonal.md) | Arquitetura hexagonal | Proposta |
 | [PLAT-0003](PLAT-0003-contrato-dos-parametros-externos.md) | Contrato dos parâmetros externos | Proposta |
 | [PLAT-0004](PLAT-0004-instancia-por-escritorio.md) | Uma instância por escritório, com `tenant_id` | Proposta |
-| [PLAT-0005](PLAT-0005-cadastro-interno-extraivel.md) | Cadastro interno, desenhado para extração | Proposta (alterada pela PLAT-0014) |
-| [PLAT-0006](PLAT-0006-infraestrutura-aberta.md) | Infraestrutura aberta | Proposta (alterada pela PLAT-0014) |
+| [PLAT-0005](PLAT-0005-cadastro-interno-extraivel.md) | Cadastro interno, desenhado para extração | Proposta (alterada em parte pela PLAT-0014: itens 1 a 3) |
+| [PLAT-0006](PLAT-0006-infraestrutura-aberta.md) | Infraestrutura aberta | Proposta (alterada em parte pela PLAT-0014: fila de trabalho) |
 | [PLAT-0008](PLAT-0008-driver-postgresql-psycopg.md) | Driver do PostgreSQL: psycopg (exceção LGPL) | Aceita |
-| [PLAT-0009](PLAT-0009-persistencia-postgresql.md) | Persistência em PostgreSQL: SQL explícito, migrações e tenant | Proposta (alterada pela PLAT-0014) |
-| [PLAT-0010](PLAT-0010-vinculos-e-dados-pessoais.md) | Vínculos e dados pessoais no banco, com histórico por data | Aceita (alterada pela PLAT-0014) |
-| [PLAT-0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) | Um banco por módulo e integração por orquestrador; dados pessoais dos trabalhadores só na folha, empresa e sócios no cadastro | Proposta |
+| [PLAT-0009](PLAT-0009-persistencia-postgresql.md) | Persistência em PostgreSQL: SQL explícito, migrações e tenant | Proposta (alterada em parte pela PLAT-0014: itens 2 e 3) |
+| [PLAT-0010](PLAT-0010-vinculos-e-dados-pessoais.md) | Vínculos e dados pessoais no banco, com histórico por data | Aceita (alterada em parte pela PLAT-0014: item 1, a partir da fase 2) |
+| [PLAT-0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) | Um banco por módulo e integração por orquestrador; dados pessoais dos trabalhadores só na folha, empresa e sócios no cadastro | Aceita (03/11/2026, P-57 da folha) |
 | [PLAT-0015](PLAT-0015-governanca-no-assembleia.md) | Decisões de plataforma num repositório próprio, o `assembleia` | Proposta |
 
 ## Tabela de correspondência

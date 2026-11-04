@@ -1,8 +1,11 @@
 # PLAT-0005: Cadastro interno, desenhado para extração
 
-> Transferida de `marcellohalfeld/blatt` (`docs/adr/0005-cadastro-interno-extraivel.md`, commit `2bcff8e`) em 2026-11-03, pela [PLAT-0015](PLAT-0015-governanca-no-assembleia.md). Texto sem alteração, salvo o título e os links, que passaram a apontar para cá ou para o repositório da folha. Nas referências do texto, "ADR NNNN" é o número de origem: ver a tabela de correspondência no [README](README.md).
+> Transferida de `marcellohalfeld/blatt` (`docs/adr/0005-cadastro-interno-extraivel.md`, commit `2bcff8e`; atualizada para `e4352fc`, com o aceite da PLAT-0014 em 03/11/2026, P-57) em 2026-11-03, pela [PLAT-0015](PLAT-0015-governanca-no-assembleia.md). Texto sem alteração, salvo o título e os links, que passaram a apontar para cá ou para o repositório da folha. Nas referências do texto, "ADR NNNN" é o número de origem: ver a tabela de correspondência no [README](README.md).
 
-- **Status:** Proposta
+- **Status:** Proposta.
+  Alterada em parte pela [ADR 0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) (aceita em
+  03/11/2026): itens 1 a 3, o cadastro passa a ser o módulo da empresa e do quadro
+  societário.
 - **Data:** 2026-10-20
 - **Decisor:** Marcello
 
