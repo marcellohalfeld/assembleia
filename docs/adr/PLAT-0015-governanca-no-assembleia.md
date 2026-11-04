@@ -93,6 +93,11 @@ comum" e o código do orquestrador incentivaria pôr lógica comum nele.
   conferência.
 - O `CLAUDE.md` da folha deixa de mandar "manter o `PLATAFORMA.md` atualizado"; essa
   obrigação passa para quem altera uma ADR `PLAT-`.
+- **Status de ADR `PLAT-` muda só aqui.** No dia da transferência, o aceite da ADR 0014 foi
+  registrado na folha (P-57, PR #19 do blatt) enquanto o texto ainda estava sendo copiado; o
+  merge na folha resolveu o conflito do lado dela, mas o `assembleia` ficou com o status
+  antigo até ser sincronizado. Daqui em diante, o aceite de uma `PLAT-` é registrado neste
+  repositório, e o módulo só aponta para cá.
 
 ## Referências
 

@@ -40,7 +40,9 @@ repositório dele.
 ### A-04. Antecipar o orquestrador (fase 2 da PLAT-0014)
 
 - **Contexto:** a PLAT-0014 (item 11) põe "implantar o orquestrador" na fase 2, depois do MVP
-  da folha. Em 03/11/2026 o Marcello decidiu começar o orquestrador (`marcellohalfeld/oper`).
+  da folha. O aceite de 03/11/2026 (P-57 da folha) foi expresso "com o faseamento dos itens 10
+  e 11": antecipar o orquestrador muda uma decisão aceita e, por isso, exige ADR nova, que
+  altera o item 11 sem reescrever a PLAT-0014. Em 03/11/2026 o Marcello decidiu começar o orquestrador (`marcellohalfeld/oper`).
   Hoje só o aspirador publica fatos; a folha não tem `outbox`.
 - **Proposta:** ADR `PLAT-0016` antecipando a implantação do orquestrador, limitada na largada a
   ler a `outbox` do aspirador, registrar e entregar a um consumidor de teste; a folha continua
@@ -61,9 +63,10 @@ repositório dele.
 
 ### A-06. Status das ADRs de plataforma ainda propostas
 
-- PLAT-0001, 0002, 0003, 0004, 0005, 0006, 0009 e 0014 continuam **Proposta**, embora o código
-  dos dois módulos já as siga. Vale revisar quais podem ser aceitas, a começar pela PLAT-0014,
-  de que dependem o aspirador (ASP-0005) e o orquestrador.
+- PLAT-0001, 0002, 0003, 0004, 0005, 0006 e 0009 continuam **Proposta**, embora o código dos
+  dois módulos já as siga. A PLAT-0014 foi aceita em 03/11/2026 (P-57 da folha). Na folha, o
+  mesmo ponto está na P-02 (aceitar as ADRs 0001 a 0007 e 0009); como a 0007 ficou na folha
+  (FOLHA-0007), a P-02 de lá passa a tratar só dela, e as demais são tratadas aqui.
 
 ### A-07. `blatt.infra` também é copiado, e as cópias já divergem
 
@@ -81,4 +84,6 @@ repositório dele.
 
 ## Resolvidas
 
-Nenhuma ainda.
+| Data | Decisão | Registro |
+| --- | --- | --- |
+| 2026-11-03 | **PLAT-0014 aceita** pelo Marcello ("adr 0014 aceita"), com o faseamento dos itens 10 e 11 e o dono de cada dado do item 9. Decidida no repositório da folha (P-57), no mesmo dia da transferência; o aceite foi trazido para cá depois, com as notas de alteração parcial nas PLAT-0005, 0006, 0009 e 0010. | [PLAT-0014](adr/PLAT-0014-banco-por-modulo-e-orquestrador.md); blatt `e4352fc` (PR #19) |

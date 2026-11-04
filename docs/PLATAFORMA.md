@@ -9,7 +9,8 @@ não o copiam: apontam para cá no `CLAUDE.md` (trecho da seção 14). Quando es
 ADR divergirem, vale a ADR.
 
 Origem: o resumo foi escrito no repositório da folha (`marcellohalfeld/blatt`, `main` em
-02/11/2026) e transferido em 03/11/2026. Os caminhos de código citados nas seções 3 a 13 são do
+02/11/2026) e transferido em 03/11/2026, já com o aceite da PLAT-0014 (03/11/2026, P-57; blatt
+`e4352fc`). Os caminhos de código citados nas seções 3 a 13 são do
 repositório da folha, que continua sendo a implementação de referência.
 
 **Numeração.** ADRs de plataforma: `PLAT-NNNN`, em `docs/adr/` deste repositório. ADRs de
@@ -45,7 +46,7 @@ altera e por quê, só para o seu escopo. Mudança que vale para todos é ADR no
 | PLAT-0006 | Infraestrutura aberta: containers OCI, PostgreSQL, fila no próprio PostgreSQL no início, OpenBao para certificados, armazenamento compatível com S3 (sistema de arquivos no MVP; MinIO evitado por ser AGPL). | Mesmos componentes; nada que prenda a um fornecedor. |
 | PLAT-0008 | Exceção LGPL nominal para o `psycopg` 3 (`psycopg[binary]`), sem modificação e atrás de adaptador; o CI ignora só ele. | Mesmo driver e mesma exceção, se usar PostgreSQL em Python. |
 | PLAT-0009 | SQL explícito, sem ORM; migrações versionadas aplicadas numa transação com *advisory lock* e hash; **schema por módulo**; chaves estrangeiras com `tenant_id` dentro do schema; transação é de quem chama; dinheiro em `numeric(15,2)` lido como `Decimal`; testes contra PostgreSQL real. | Mesmo padrão de persistência (seção 6). |
-| PLAT-0014 (proposta) | **Um banco PostgreSQL por módulo**, com usuário próprio e migrações próprias; nenhum módulo lê o banco de outro; fatos publicados numa `outbox` na mesma transação do dado e recebidos numa `inbox` com consumo idempotente; um orquestrador sem regra de negócio, com acesso só a `outbox` e `inbox`, entrega e registra. Dados pessoais dos trabalhadores só na folha, sem circular; empresa e quadro societário no cadastro, compartilhados. Fase 1 já (módulos novos); fase 2 depois do MVP da folha (separar folha e cadastro, orquestrador). | O módulo novo nasce com banco próprio, tabela de migrações própria, `outbox`/`inbox` e eventos no contrato da seção 9 (seção 6). Substitui, para módulos novos, o "schema por módulo" da PLAT-0009. |
+| PLAT-0014 (aceita em 03/11/2026) | **Um banco PostgreSQL por módulo**, com usuário próprio e migrações próprias; nenhum módulo lê o banco de outro; fatos publicados numa `outbox` na mesma transação do dado e recebidos numa `inbox` com consumo idempotente; um orquestrador sem regra de negócio, com acesso só a `outbox` e `inbox`, entrega e registra. Dados pessoais dos trabalhadores só na folha, sem circular; empresa e quadro societário no cadastro, compartilhados. Fase 1 já (módulos novos); fase 2 depois do MVP da folha (separar folha e cadastro, orquestrador). | O módulo novo nasce com banco próprio, tabela de migrações própria, `outbox`/`inbox` e eventos no contrato da seção 9 (seção 6). Substitui, para módulos novos, o "schema por módulo" da PLAT-0009. |
 | PLAT-0010, FOLHA-0011 | Dados pessoais no cadastro (`cadastro.pessoa`, `cadastro.pessoa_versao`), vínculo e contrato na folha; **versões por data de vigência, só acrescentadas** (retificação substitui a versão da mesma data guardando o recibo; nada é apagado). | Mesmo modelo de histórico para qualquer dado que mude no tempo. |
 
 Decisões só da folha, úteis como referência se o módulo novo falar com webservices do
@@ -168,8 +169,8 @@ Regras para quem consome:
 
 ## 6. Banco de dados, migrações e tenant
 
-- **PLAT-0014 (proposta): um banco PostgreSQL por módulo** no mesmo servidor da instância, com
-  usuário próprio, e um banco `orquestrador`. **Módulos novos já nascem assim** (fase 1). A
+- **PLAT-0014 (aceita em 03/11/2026): um banco PostgreSQL por módulo** no mesmo servidor da
+  instância, com usuário próprio, e um banco `orquestrador`. **Módulos novos já nascem assim** (fase 1). A
   folha continua, até depois do MVP dela, num banco com os schemas `cadastro` e `folha`
   (PLAT-0009); a separação é a fase 2.
 - Dentro de cada banco, as regras abaixo continuam valendo.
