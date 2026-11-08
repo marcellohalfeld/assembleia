@@ -2,7 +2,8 @@
 
 Repositório de **governança** da plataforma Blatt (PLAT-0015). Aqui ficam as decisões que valem
 para todos os módulos; os módulos ficam nos repositórios deles (tabela no `README.md`).
-Comece por `docs/PENDENCIAS.md` e `docs/adr/README.md`.
+Comece por `docs/PLANO-CONVERGENCIA.md` (onde estamos), `docs/PENDENCIAS.md` e
+`docs/adr/README.md`.
 
 ## O que entra aqui
 

@@ -21,6 +21,8 @@ o núcleo comum. Não tem código de módulo nem do orquestrador
   antigos.
 - [`docs/contratos/README.md`](docs/contratos/README.md): índice dos fatos publicados por cada
   módulo (os schemas ficam com quem publica).
+- [`docs/PLANO-CONVERGENCIA.md`](docs/PLANO-CONVERGENCIA.md): etapas para os módulos passarem a
+  funcionar como plataforma (operação, wiki, APIs, interface, orquestrador).
 - [`docs/PENDENCIAS.md`](docs/PENDENCIAS.md): pontos da plataforma que dependem do Marcello.
 - [`comum/`](comum/README.md): fonte canônica do `blatt.comum` e o manifesto de hashes.
 - [`scripts/conferir_comum.py`](scripts/conferir_comum.py): confere a cópia do comum num
