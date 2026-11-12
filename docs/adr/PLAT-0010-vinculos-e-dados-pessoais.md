@@ -2,11 +2,7 @@
 
 > Transferida de `marcellohalfeld/blatt` (`docs/adr/0010-vinculos-e-dados-pessoais.md`, commit `2bcff8e`; atualizada para `e4352fc`, com o aceite da PLAT-0014 em 03/11/2026, P-57) em 2026-11-03, pela [PLAT-0015](PLAT-0015-governanca-no-assembleia.md). Texto sem alteração, salvo o título e os links, que passaram a apontar para cá ou para o repositório da folha. Nas referências do texto, "ADR NNNN" é o número de origem: ver a tabela de correspondência no [README](README.md).
 
-- **Status:** Aceita (27/10/2026, P-42); complementada pela
-  [ADR 0011](https://github.com/marcellohalfeld/blatt/blob/main/docs/adr/0011-dependentes-por-vinculo.md) (escolha dos dependentes por vínculo).
-  Alterada em parte pela [ADR 0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) (aceita em
-  03/11/2026): item 1, os dados pessoais dos trabalhadores ficam no banco da folha, a partir
-  da fase 2.
+- **Status:** Substituída em parte: a regra comum (item 2, versões por data de vigência) pela [PLAT-0018](PLAT-0018-dono-de-cada-dado-e-cadastro.md) (proposta; vale quando for aceita); a parte só da folha vai para a FOLHA-0016 do `blatt`, ainda a escrever, e até lá continua valendo aqui. Antes: Aceita (27/10/2026, P-42); complementada pela [ADR 0011](https://github.com/marcellohalfeld/blatt/blob/main/docs/adr/0011-dependentes-por-vinculo.md) (escolha dos dependentes por vínculo); alterada em parte pela [ADR 0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) (aceita em 03/11/2026) no item 1.
 - **Data:** 2026-10-26
 - **Decisor:** Marcello
 
