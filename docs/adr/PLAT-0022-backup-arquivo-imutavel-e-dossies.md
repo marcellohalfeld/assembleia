@@ -52,6 +52,7 @@ banco.
    formato *custom* é compactado e restaurado pelo `pg_restore`, inclusive de forma seletiva.
 2. A cópia é feita por um papel de backup, só de leitura.
 3. **Perda máxima assumida: 24 horas** (o trabalho de um dia). **A confirmar pelo Marcello.**
+   Confirmado em 12/11/2026 (pendência A-11).
    Alternativa, se 24 horas for muito: arquivamento contínuo do WAL com cópia base, que permite
    voltar a qualquer instante, ao custo de mais um processo e mais espaço.
 
@@ -80,6 +81,7 @@ banco.
 4. A política de retenção (quantas cópias diárias, semanais, mensais, anuais) e os prazos
    legais de guarda são **pendência do Marcello**; a retenção é aplicada por
    `restic forget`/`prune` quando decidida. Até lá, nada é apagado.
+   Confirmado em 12/11/2026 (pendência A-12): por padrão nada é apagado; prazos legais seguem em aberto.
 
 ### 5. Teste de restauração
 

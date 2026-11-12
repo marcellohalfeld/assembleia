@@ -26,28 +26,22 @@ repositório dele.
   consulta à Receita).
 - **Bloqueia:** a etapa do cadastro e o fim da exceção datada da PLAT-0017, item 9.
 
-### A-10. Guarda do certificado A1 para coleta agendada
+### A-10. Guarda do certificado A1 para coleta agendada (futura)
 
-- **Hoje:** o A1 é lido a cada execução e fica só na memória (ASP-0003); na web, enviado pelo
-  formulário a cada operação (PLAT-0020, item 5).
-- **Opções:** OpenBao (MPL-2.0); arquivo cifrado no servidor com a chave fora dele;
-  alternativa mais simples a pesquisar. Cada uma muda o risco de o certificado ficar no
-  servidor e exige revisar a ASP-0003.
+- **Decidido em 12/11/2026** (ver Resolvidas): por enquanto o A1 vai pelo formulário a cada
+  operação e fica só na memória, sem guarda (PLAT-0020, item 5.1; ASP-0003).
+- **Fica para quando houver coleta agendada:** como guardar o certificado. Opções: OpenBao
+  (MPL-2.0); arquivo cifrado no servidor com a chave fora dele; alternativa mais simples a
+  pesquisar. Cada uma muda o risco de o certificado ficar no servidor e exige revisar a ASP-0003.
 - **Bloqueia:** qualquer coleta agendada que dependa do A1.
 
-### A-11. Perda máxima aceitável no backup
+### A-12. Prazos legais de guarda
 
-- **Proposta:** 24 horas (cópia lógica dos bancos toda noite e antes de cada migração,
-  PLAT-0022, item 2).
-- **Alternativa:** arquivamento contínuo do WAL com cópia base, para voltar a qualquer instante,
-  com um processo e mais espaço a mais.
-- **Bloqueia:** nada para começar; define a rotina do serviço de backup no `oper`.
-
-### A-12. Retenção do backup e prazos legais de guarda
-
-- **Falta decidir:** quantas cópias guardar (diárias, semanais, mensais, anuais) e por quanto
-  tempo guardar cada tipo de documento (XML de NFS-e e NF-e, eventos e recibos do eSocial,
-  folhas, dossiês). A interpretação dos prazos legais é do Marcello.
+- **Decidido em 12/11/2026** (ver Resolvidas): a retenção padrão do backup não apaga nada.
+- **Falta decidir:** por quanto tempo guardar cada tipo de documento (XML de NFS-e e NF-e,
+  eventos e recibos do eSocial, folhas, dossiês) e, a partir disso, se e quando ligar uma
+  política de retenção. A interpretação dos prazos legais é do Marcello; nenhum prazo foi
+  afirmado até aqui.
 - **Fontes a conferir** (lembradas de memória pela sessão de 12/11/2026, sem leitura do texto
   oficial e sem afirmar prazo): Código Tributário Nacional (Lei 5.172/1966), arts. 173, 174 e
   195, parágrafo único; Ajuste SINIEF 07/2005 (guarda do XML da NF-e); legislação do FGTS (Lei
@@ -55,18 +49,15 @@ repositório dele.
   1.194; manuais do eSocial e da NFS-e nacional sobre guarda.
 - **Até decidir:** o backup não apaga nada (PLAT-0022, item 4.4).
 
-### A-13. Licenças: 0BSD do htmx e software de sistema nas imagens
+### A-13. Licenças: software de sistema nas imagens de container
 
-- **0BSD:** o htmx (2.0.11, conferido no npm em 12/11/2026) é *Zero-Clause BSD*, mais
-  permissiva que a BSD de duas cláusulas, mas fora da lista nominal da PLAT-0001, item 2.
-  **Proposta:** acrescentar a 0BSD à lista de licenças permitidas, numa ADR que altere esse
-  item; alternativa: trocar o htmx. Até decidir, o htmx não entra em código (PLAT-0021).
-- **Imagens de container:** as imagens base (Debian, Python, PostgreSQL, Caddy) trazem software
-  de sistema com licenças diversas, inclusive GPL. A PLAT-0001 trata das dependências do código.
-  **Proposta:** registrar, na mesma ADR, que a política vale para as dependências do código e
-  que componentes do sistema operacional da imagem, usados sem modificação, ficam fora dela
-  (com o aviso de licenças na distribuição, como a PLAT-0008 já faz para o psycopg).
-- **Bloqueia:** o primeiro adaptador web com htmx.
+- **Decidido em 12/11/2026** (ver Resolvidas): a 0BSD do htmx é tratada como permissiva.
+- **Falta decidir:** as imagens base (Debian, Python, PostgreSQL, Caddy) trazem software de
+  sistema com licenças diversas, inclusive GPL. A PLAT-0001 trata das dependências do código.
+  **Proposta:** registrar numa ADR que a política vale para as dependências do código e que
+  componentes do sistema operacional da imagem, usados sem modificação, ficam fora dela (com o
+  aviso de licenças na distribuição, como a PLAT-0008 já faz para o psycopg).
+- **Bloqueia:** nada no código; esclarece a política de licenças para as imagens da PLAT-0020.
 
 ### A-14. FOLHA-0016: modelo de vínculo e contrato da folha
 
@@ -158,4 +149,8 @@ Em PR de cada repositório (as PLAT-0016 a 0022 foram aceitas em 12/11/2026):
 | 2026-11-12 | **A-04** (antecipar o orquestrador): o orquestrador dá lugar a um entregador sem banco próprio no `oper`, que entra em uso com o primeiro consumidor. | [PLAT-0019](adr/PLAT-0019-integracao-por-fatos-e-entregador.md) |
 | 2026-11-12 | **A-02** (classificação das ADRs transferidas; a PLAT-0010 mistura regra comum e da folha): a regra comum passa à PLAT-0018, item 1; a parte da folha vai para a FOLHA-0016, ainda a escrever (A-14). As demais classificações de 03/11/2026 ficam como estavam. | [PLAT-0018](adr/PLAT-0018-dono-de-cada-dado-e-cadastro.md), item 1; A-14 |
 | 2026-11-12 | **P-33 (b) do aspirador**: `fiscal.nfe_manifestada` no índice de contratos, com os demais fatos que o aspirador publica. A parte (a) é a A-15. | [índice de contratos](contratos/README.md) |
+| 2026-11-12 | **A-11** (perda máxima do backup): cópia lógica dos bancos toda noite (e antes de cada migração), com perda de até 24 horas; sem arquivamento contínuo do WAL por ora. Marcello: "pode registrar essas pendências como aceitas conforme a sua proposta". | [PLAT-0022](adr/PLAT-0022-backup-arquivo-imutavel-e-dossies.md), item 2.3 |
+| 2026-11-12 | **A-12, retenção padrão**: nada é apagado por padrão (sem política de `restic forget`). Os prazos legais de guarda continuam abertos na A-12. Marcello: "pode registrar essas pendências como aceitas conforme a sua proposta". | [PLAT-0022](adr/PLAT-0022-backup-arquivo-imutavel-e-dossies.md), item 4.4 |
+| 2026-11-12 | **A-13, htmx**: a licença 0BSD é tratada como permissiva para os fins da PLAT-0001; o htmx pode entrar em código. A parte das imagens de container continua aberta na A-13. Marcello: "pode registrar essas pendências como aceitas conforme a sua proposta". | [PLAT-0021](adr/PLAT-0021-interface-web.md), seção "Licenças" |
+| 2026-11-12 | **A-10, uso atual do A1**: enviado pelo formulário a cada operação e mantido só em memória, sem guarda. A guarda para coleta agendada continua aberta na A-10. Marcello: "pode registrar essas pendências como aceitas conforme a sua proposta". | [PLAT-0020](adr/PLAT-0020-infraestrutura-e-implantacao.md), item 5 |
 | 2026-11-12 | **Direção da reorganização** dada pelo Marcello: repositórios separados (monorepo descartado), `oper` como operação da instância, entregador no lugar do orquestrador, servidor doméstico com Docker Compose e acesso só pela rede local, interface web, backup em três camadas com restic para disco local e Google Drive, cadastro geral centralizado com os dados sensíveis dos trabalhadores só na folha. | PLAT-0016 a PLAT-0022 (aceitas em 12/11/2026) |

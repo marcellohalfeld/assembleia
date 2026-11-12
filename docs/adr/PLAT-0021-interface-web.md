@@ -66,7 +66,7 @@ Todas estão na lista da PLAT-0001, item 2, **exceto o htmx**: a 0BSD (*Zero-Cla
 permissiva que a BSD de duas cláusulas (só a permissão e a isenção de garantia, sem exigir
 aviso de copyright), mas não está nominalmente na lista. **Decisão do Marcello pendente:**
 aceitar a 0BSD como permissiva (acréscimo à lista da PLAT-0001) ou trocar o htmx. Até lá, o
-htmx não entra em código.
+htmx não entra em código. Decidido em 12/11/2026 (pendência A-13): 0BSD aceita como permissiva.
 
 ## Alternativas consideradas
 

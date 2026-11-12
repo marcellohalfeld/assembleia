@@ -39,7 +39,7 @@ segue a decisão dele, registrada com a fonte.
 | Tema | Regra | ADR |
 | --- | --- | --- |
 | Linguagem | Python ≥ 3.12, `mypy --strict`, `uv` | [PLAT-0001](adr/PLAT-0001-python-e-politica-de-licencas.md) |
-| Licenças | Permitidas sem consulta: MIT, BSD (2 e 3 cláusulas), Apache-2.0, ISC, PSF, MPL-2.0, PostgreSQL License. LGPL só com ADR (exceção nominal: `psycopg`). Proibidas: GPL, AGPL, SSPL, BSL, *source available*, proprietário. CI roda `pip-licenses`. 0BSD em aberto (A-13). A licença do próprio Blatt está em aberto: sem `LICENSE`, o código é fechado | [PLAT-0001](adr/PLAT-0001-python-e-politica-de-licencas.md), [PLAT-0008](adr/PLAT-0008-driver-postgresql-psycopg.md) |
+| Licenças | Permitidas sem consulta: MIT, BSD (2 e 3 cláusulas), Apache-2.0, ISC, PSF, MPL-2.0, PostgreSQL License. LGPL só com ADR (exceção nominal: `psycopg`). Proibidas: GPL, AGPL, SSPL, BSL, *source available*, proprietário. CI roda `pip-licenses`. 0BSD tratada como permissiva (12/11/2026, A-13; htmx, PLAT-0021). A licença do próprio Blatt está em aberto: sem `LICENSE`, o código é fechado | [PLAT-0001](adr/PLAT-0001-python-e-politica-de-licencas.md), [PLAT-0008](adr/PLAT-0008-driver-postgresql-psycopg.md) |
 | Arquitetura | Hexagonal: `dominio` ← `aplicacao` ← `adaptadores`, verificada pelo `import-linter`; domínio sem I/O | [PLAT-0002](adr/PLAT-0002-arquitetura-hexagonal.md) |
 | Parâmetros legais | Fora do código, em JSON com JSON Schema, vigência real, base legal, fonte, conferência e manifesto SHA-256; números como texto decimal; resolução pelo período de referência de cada tributo (competência; mês de pagamento para IRRF), nunca pela data de hoje; fórmulas em código revisado | [PLAT-0003](adr/PLAT-0003-contrato-dos-parametros-externos.md) |
 | Instância e tenant | Uma instância por escritório; `tenant_id` em toda tabela de negócio, lido num único ponto | [PLAT-0004](adr/PLAT-0004-instancia-por-escritorio.md) |
@@ -49,7 +49,7 @@ segue a decisão dele, registrada com a fonte.
 | Integração | Fatos no passado, `outbox` na mesma transação do dado, `inbox` idempotente; envelope comum; JSON Schema versionado por quem publica; nenhum módulo lê tabela de negócio de outro; entregador sem regra de negócio e sem banco próprio, com cursor no destino | [PLAT-0019](adr/PLAT-0019-integracao-por-fatos-e-entregador.md) |
 | Infraestrutura | Docker Compose num servidor doméstico; PostgreSQL, Caddy, um container por módulo, portal, entregador, backup; segredos em arquivos; acesso só pela rede local, TLS da CA interna do Caddy; containers não-root; imagens construídas a partir de tags. A1 pelo formulário, só em memória | [PLAT-0020](adr/PLAT-0020-infraestrutura-e-implantacao.md) |
 | Interface web | Adaptador web em cada módulo, com os mesmos casos de uso da CLI, sob um prefixo; portal no `oper` com login; Caddy com `forward_auth`; FastAPI + Jinja2 + htmx, sem build de JavaScript | [PLAT-0021](adr/PLAT-0021-interface-web.md) |
-| Backup | Arquivo imutável por SHA-256 para todo arquivo trocado com órgão público; `pg_dump -Fc` por banco toda noite e antes de cada migração; dossiê legível por empresa e período; restic cifrado para disco local e Google Drive; teste de restauração mensal | [PLAT-0022](adr/PLAT-0022-backup-arquivo-imutavel-e-dossies.md) |
+| Backup | Arquivo imutável por SHA-256 para todo arquivo trocado com órgão público; `pg_dump -Fc` por banco toda noite e antes de cada migração (perda máxima de 24 horas); nada é apagado por padrão; dossiê legível por empresa e período; restic cifrado para disco local e Google Drive; teste de restauração mensal | [PLAT-0022](adr/PLAT-0022-backup-arquivo-imutavel-e-dossies.md) |
 
 ## 3. Estrutura de um módulo
 
@@ -184,8 +184,8 @@ uv sync && uv run ruff check . && uv run ruff format --check . \
 ## 9. O que ainda está em aberto
 
 Ver [PENDENCIAS](PENDENCIAS.md): aceite das PLAT-0001 a 0004 (A-06),
-desenho do cadastro (A-09), guarda do A1 (A-10), perda máxima do backup (A-11), retenção e
-prazos legais (A-12), licenças 0BSD e imagens (A-13), FOLHA-0016 (A-14), `mes_do_evento`
+desenho do cadastro (A-09), guarda do A1 para coleta agendada (A-10), prazos legais de guarda
+(A-12), licenças do software de sistema nas imagens (A-13), FOLHA-0016 (A-14), `mes_do_evento`
 (A-15), branch padrão do aspirador (A-16), levar a reorganização aos módulos (A-17), tag
 `v0.1.0` do `blatt-plataforma` (A-18).
 
