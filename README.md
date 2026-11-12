@@ -3,8 +3,8 @@
 Regras da plataforma Blatt: as decisões que valem para todos os módulos, o resumo delas, o
 índice de contratos e as pendências. Pela
 [PLAT-0016](docs/adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) (aceita em
-12/11/2026), guarda também o pacote `blatt-plataforma`, com o código comum sem regra de negócio. Não tem código de
-módulo nem de operação.
+12/11/2026), guarda também o pacote `blatt-plataforma`, com o código comum sem regra de
+negócio. Não tem código de módulo nem de operação.
 
 ## Repositórios da plataforma
 
@@ -32,7 +32,7 @@ aceite da PLAT-0019, a integração continua a da PLAT-0014.
 - [`docs/PENDENCIAS.md`](docs/PENDENCIAS.md): pontos da plataforma que dependem do Marcello.
 - [`docs/ambiente-das-sessoes.md`](docs/ambiente-das-sessoes.md): notas práticas para as
   sessões do Claude Code.
-- [`comum/`](comum/README.md): fonte canônica do `blatt.comum` e o manifesto de hashes; dá
-  lugar ao pacote `blatt-plataforma` na etapa 1 da PLAT-0016.
-- [`scripts/conferir_comum.py`](scripts/conferir_comum.py): confere a cópia do comum num
-  módulo, enquanto houver cópias.
+- [`src/blatt/`](src/blatt/README.md): o pacote `blatt-plataforma` (hoje `blatt.comum` e
+  `blatt.infra`), com `pyproject.toml` na raiz e testes em `tests/`. O README do pacote explica
+  como um módulo o instala (`uv add "blatt-plataforma @ git+https://github.com/marcellohalfeld/assembleia@vX.Y.Z"`)
+  e como se publica uma versão nova.

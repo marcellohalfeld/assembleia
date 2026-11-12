@@ -120,18 +120,48 @@ repositório dele.
 
 Em PR de cada repositório, conforme cada ADR for aceita:
 
-- **todos:** trocar as cópias de `blatt.comum` e `blatt.infra` pela dependência
-  `blatt-plataforma` e remover `src/blatt/__init__.py` (PLAT-0016); atualizar o trecho
-  "Plataforma" do `CLAUDE.md` (trecho-padrão no [PLATAFORMA.md](PLATAFORMA.md));
-- **`blatt`:** remover os arquivos-aviso das ADRs transferidas, com o índice redirecionando
-  (PLAT-0016); FOLHA-0016 (A-14); gravar lotes e retornos do eSocial no arquivo imutável e
+- **todos** (PLAT-0016, depois da tag da A-18; passos conferidos num projeto mínimo, detalhe em
+  [`src/blatt/README.md`](../src/blatt/README.md)):
+  - `uv add "blatt-plataforma @ git+https://github.com/marcellohalfeld/assembleia@v0.1.0"`;
+  - apagar `src/blatt/comum/`, `src/blatt/infra/` e `src/blatt/__init__.py`; trocar
+    `src/blatt/py.typed` por um `py.typed` em cada subpacote do módulo;
+  - chamar `aplicar(conexao, <pacote>)` e `disponiveis(<pacote>)` sempre com o pacote das
+    migrações do módulo: o parâmetro passou a ser obrigatório e `PACOTE_PADRAO` não existe mais;
+  - `pyproject.toml`: no `mypy`, `explicit_package_bases = true` e `packages` com os pacotes do
+    módulo (`blatt.<modulo>`) em vez de `blatt`; no `import-linter`, `root_package = "blatt"`
+    continua valendo (junta a parte instalada e a do módulo), e os contratos sobre
+    `blatt.comum`/`blatt.infra` podem sair, porque o pacote os verifica;
+  - atualizar o trecho "Plataforma" do `CLAUDE.md` (trecho-padrão no
+    [PLATAFORMA.md](PLATAFORMA.md)), que ainda cita o manifesto e o `scripts/conferir_comum.py`;
+  - até adotar o pacote, não editar a cópia: o manifesto e o script de conferência já saíram
+    daqui;
+- **`blatt`:** mover as migrações de `src/blatt/infra/postgres/sql/` (0001 a 0006, sem mudar
+  o conteúdo, para o hash registrado em `blatt_migracao` continuar valendo) para um pacote da
+  folha, por exemplo `blatt.folha.adaptadores.postgres` (escolha da sessão da folha), e passar
+  esse pacote em `cli_banco.py` (`aplicar(conexao)`), `tests/conftest.py` e
+  `tests/test_migracoes.py` (inclusive o `monkeypatch` de `disponiveis`, que passa a receber o
+  pacote); trocar `blatt.__version__` em `tests/test_estrutura.py` (deixa de existir com o
+  `__init__.py`); `tests/test_configuracao.py` fica redundante com os testes do pacote; remover
+  os arquivos-aviso das ADRs transferidas, com o índice redirecionando (PLAT-0016); FOLHA-0016 (A-14); gravar lotes e retornos do eSocial no arquivo imutável e
   gerar o dossiê da competência (PLAT-0022); extrair casos de uso das CLIs para o adaptador
   web (PLAT-0021);
-- **`aspirador`:** remover `docs/plataforma/adr/0014-banco-por-modulo-e-orquestrador.md`, o
-  aviso `docs/PLATAFORMA.md` e `src/blatt/infra/ORIGEM.md` (PLAT-0016); renomear o papel
+- **`aspirador`:** as chamadas de migração já passam `PACOTE_MIGRACOES`; remover também
+  `src/blatt/comum/ORIGEM.md` e `src/blatt/infra/ORIGEM.md` com as cópias; avaliar remover
+  `src/blatt/fiscal/__init__.py`, para que `blatt.fiscal` também seja *namespace* e o
+  `fiscal.escrituracao` possa viver noutro repositório; remover
+  `docs/plataforma/adr/0014-banco-por-modulo-e-orquestrador.md` e o aviso `docs/PLATAFORMA.md`
+  (PLAT-0016); renomear o papel
   `blatt_orquestrador` para `blatt_entregador` (PLAT-0019); decidir numa `ASP-` o endereço por
   hash do arquivo de originais (PLAT-0022);
 - **`oper`:** ADRs `OPER-` de implantação, entregador, portal e backup (PLAT-0019 a 0022).
+
+### A-18. Marcar a tag `v0.1.0` do `blatt-plataforma`
+
+- **Hoje:** o pacote está no `assembleia` (`pyproject.toml` na raiz, versão 0.1.0, só
+  `blatt.comum` e `blatt.infra`), ainda sem tag.
+- **Falta:** depois do merge em `main`, o Marcello marca e envia a tag no commit de `main`
+  (`git tag v0.1.0` e `git push origin v0.1.0`).
+- **Bloqueia:** a adoção do pacote pelos módulos (A-17, item "todos").
 
 ## Encaminhadas
 

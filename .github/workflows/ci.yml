@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checagens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Instalar dependências
+        run: uv sync --locked
+      - name: Lint
+        run: uv run ruff check .
+      - name: Formatação
+        run: uv run ruff format --check .
+      - name: Tipos
+        run: uv run mypy
+      - name: Fronteiras do pacote
+        run: uv run lint-imports
+      - name: Testes
+        # O runner ubuntu traz o PostgreSQL instalado; os testes de banco não podem ser pulados.
+        env:
+          BLATT_EXIGIR_POSTGRES: "1"
+        run: uv run pytest
+      - name: Licenças das dependências (PLAT-0001; exceção nominal do psycopg, PLAT-0008)
+        run: >
+          uv run pip-licenses --partial-match
+          --ignore-packages psycopg psycopg-binary
+          --fail-on="GNU Affero General Public License;AGPL;GNU General Public License;GPL"
+      - name: Wheel só com blatt.comum e blatt.infra, sem blatt/__init__.py
+        run: |
+          uv build --wheel -o dist
+          python3 -m zipfile -l dist/*.whl
+          if python3 -m zipfile -l dist/*.whl | grep -qE '^blatt/__init__\.py'; then
+            echo "o wheel não pode ter blatt/__init__.py (namespace package, PLAT-0016)"; exit 1
+          fi
+          python3 -m zipfile -l dist/*.whl | grep -q '^blatt/comum/py.typed'
+          python3 -m zipfile -l dist/*.whl | grep -q '^blatt/infra/py.typed'
