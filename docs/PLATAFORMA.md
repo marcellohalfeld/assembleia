@@ -1,10 +1,10 @@
 # Plataforma Blatt: regras comuns
 
-> **Aviso.** Este resumo reflete as propostas de 12/11/2026 (PLAT-0016 a PLAT-0022), ainda
-> **pendentes de aceite** (pendência A-08). Até o aceite de cada uma, vale a ADR que ela
-> substitui (PLAT-0005, 0006, 0009, 0010, 0014 e 0015); em especial, a troca do orquestrador
-> pelo entregador (PLAT-0019) altera uma decisão aceita. Quando este resumo e uma ADR
-> divergirem, vale a ADR.
+> **Aviso.** Este resumo reflete as ADRs de 12/11/2026 (PLAT-0016 a PLAT-0022). A PLAT-0016
+> foi **aceita** em 12/11/2026; as PLAT-0017 a 0022 continuam **pendentes de aceite**
+> (pendência A-08). Até o aceite de cada uma, vale a ADR que ela substitui (PLAT-0005, 0006,
+> 0009, 0010 e 0014); em especial, a troca do orquestrador pelo entregador (PLAT-0019) altera
+> uma decisão aceita. Quando este resumo e uma ADR divergirem, vale a ADR.
 
 Resumo, por tema, das regras que valem para todos os módulos da plataforma e do que um módulo
 precisa respeitar para ser integrado sem reescrita. Cada item aponta para a ADR que o decide.

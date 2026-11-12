@@ -4,7 +4,7 @@ Cada decisão que vale para todos os módulos tem um arquivo, no formato de Mich
 título, status, contexto, decisão e consequências
 ([Nygard, 2011](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)).
 
-Regras (PLAT-0015; na proposta PLAT-0016, item 5, sem mudança):
+Regras (PLAT-0016, item 5, mantidas da PLAT-0015):
 
 - Prefixo `PLAT-`, numeração sequencial, nunca reaproveitada. A próxima é a **PLAT-0023**.
 - Status: **Proposta** → **Aceita** (ou **Rejeitada**). Uma decisão revista não é apagada nem
@@ -16,8 +16,9 @@ Regras (PLAT-0015; na proposta PLAT-0016, item 5, sem mudança):
 
 ## Conjunto vigente
 
-As propostas de 12/11/2026 (PLAT-0016 a PLAT-0022) reorganizam a plataforma e, quando aceitas,
-formam com as anteriores que não foram substituídas o conjunto que vale:
+As ADRs de 12/11/2026 (PLAT-0016 a PLAT-0022) reorganizam a plataforma e, à medida que forem
+aceitas, formam com as anteriores que não foram substituídas o conjunto que vale. A PLAT-0016
+foi aceita em 12/11/2026; as PLAT-0017 a 0022 continuam propostas:
 
 | Tema | ADR |
 | --- | --- |
@@ -33,8 +34,9 @@ formam com as anteriores que não foram substituídas o conjunto que vale:
 | Interface web | [PLAT-0021](PLAT-0021-interface-web.md) |
 | Backup | [PLAT-0022](PLAT-0022-backup-arquivo-imutavel-e-dossies.md) |
 
-**Enquanto as PLAT-0016 a 0022 forem propostas, valem as antigas** (PLAT-0005, 0006, 0009,
-0010, 0014 e 0015), cujo status já aponta para a substituta. A PLAT-0019 muda uma decisão
+A PLAT-0016, aceita, substitui a PLAT-0015. **Enquanto as PLAT-0017 a 0022 forem propostas,
+valem as antigas** (PLAT-0005, 0006, 0009, 0010 e 0014), cujo status já aponta para a
+substituta. A PLAT-0019 muda uma decisão
 aceita (o orquestrador da PLAT-0014) e pede atenção no aceite (pendência A-08).
 
 ## Índice
@@ -51,8 +53,8 @@ aceita (o orquestrador da PLAT-0014) e pede atenção no aceite (pendência A-08
 | [PLAT-0009](PLAT-0009-persistencia-postgresql.md) | Persistência em PostgreSQL: SQL explícito, migrações e tenant | Substituída pela PLAT-0017 e, no item 8, pela PLAT-0016 (propostas) |
 | [PLAT-0010](PLAT-0010-vinculos-e-dados-pessoais.md) | Vínculos e dados pessoais no banco, com histórico por data | Aceita; regra comum substituída pela PLAT-0018 (proposta); parte da folha a virar FOLHA-0016 |
 | [PLAT-0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) | Um banco por módulo e integração por orquestrador; dados pessoais dos trabalhadores só na folha, empresa e sócios no cadastro | Aceita (03/11/2026, P-57 da folha); substituída pelas PLAT-0017, 0018 e 0019 (propostas) |
-| [PLAT-0015](PLAT-0015-governanca-no-assembleia.md) | Decisões de plataforma num repositório próprio, o `assembleia` | Substituída pela PLAT-0016 (proposta) |
-| [PLAT-0016](PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) | Mapa de módulos, papel de cada repositório e código comum como pacote | Proposta |
+| [PLAT-0015](PLAT-0015-governanca-no-assembleia.md) | Decisões de plataforma num repositório próprio, o `assembleia` | Substituída pela PLAT-0016 (aceita em 12/11/2026) |
+| [PLAT-0016](PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) | Mapa de módulos, papel de cada repositório e código comum como pacote | Aceita (12/11/2026) |
 | [PLAT-0017](PLAT-0017-persistencia-postgresql.md) | Persistência em PostgreSQL: um banco por módulo, SQL explícito, migrações e tenant | Proposta |
 | [PLAT-0018](PLAT-0018-dono-de-cada-dado-e-cadastro.md) | Dono de cada dado, histórico por vigência e cadastro geral | Proposta |
 | [PLAT-0019](PLAT-0019-integracao-por-fatos-e-entregador.md) | Integração por fatos: outbox, inbox e um entregador sem banco próprio | Proposta (altera a PLAT-0014, aceita) |

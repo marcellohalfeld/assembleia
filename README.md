@@ -1,15 +1,17 @@
 # Assembleia
 
 Regras da plataforma Blatt: as decisões que valem para todos os módulos, o resumo delas, o
-índice de contratos e as pendências. Pela proposta
-[PLAT-0016](docs/adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), passa a guardar
-também o pacote `blatt-plataforma`, com o código comum sem regra de negócio. Não tem código de
+índice de contratos e as pendências. Pela
+[PLAT-0016](docs/adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) (aceita em
+12/11/2026), guarda também o pacote `blatt-plataforma`, com o código comum sem regra de negócio. Não tem código de
 módulo nem de operação.
 
 ## Repositórios da plataforma
 
-Papéis conforme a PLAT-0016 (proposta de 12/11/2026; até o aceite, vale a
-[PLAT-0015](docs/adr/PLAT-0015-governanca-no-assembleia.md), em que o `oper` é o orquestrador).
+Papéis conforme a PLAT-0016 (aceita em 12/11/2026; substitui a
+[PLAT-0015](docs/adr/PLAT-0015-governanca-no-assembleia.md)). O que o `oper` fará pela
+integração, pelo portal e pelo backup depende das PLAT-0019, 0021 e 0022, ainda propostas; até o
+aceite da PLAT-0019, a integração continua a da PLAT-0014.
 
 | Repositório | Papel | ADRs |
 | --- | --- | --- |

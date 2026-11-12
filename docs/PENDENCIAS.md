@@ -7,11 +7,12 @@ repositório dele.
 
 ## Abertas
 
-### A-08. Aceitar as PLAT-0016 a PLAT-0022 (reorganização de 12/11/2026)
+### A-08. Aceitar as PLAT-0017 a PLAT-0022 (reorganização de 12/11/2026)
 
-- **Propostas:** [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md)
-  (repositórios, mapa de módulos, pacote `blatt-plataforma`, governança),
-  [PLAT-0017](adr/PLAT-0017-persistencia-postgresql.md) (persistência),
+- **Aceita:** [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md)
+  (repositórios, mapa de módulos, pacote `blatt-plataforma`, governança), em 12/11/2026
+  (ver Resolvidas).
+- **Propostas:** [PLAT-0017](adr/PLAT-0017-persistencia-postgresql.md) (persistência),
   [PLAT-0018](adr/PLAT-0018-dono-de-cada-dado-e-cadastro.md) (dono de cada dado, cadastro),
   [PLAT-0019](adr/PLAT-0019-integracao-por-fatos-e-entregador.md) (integração por fatos,
   entregador), [PLAT-0020](adr/PLAT-0020-infraestrutura-e-implantacao.md) (infraestrutura e
@@ -23,8 +24,8 @@ repositório dele.
   o sentido; a 0018 acrescenta a direção do cadastro geral dada em 12/11/2026.
 - Podem ser aceitas separadamente. Cada aceite muda a linha de status da nova e confirma a
   substituição registrada nas antigas.
-- **Bloqueia:** a etapa 1 (pacote `blatt-plataforma`, PLAT-0016), o código do `oper`
-  (entregador, portal, backup) e o adaptador web dos módulos.
+- **Bloqueia:** o código do `oper` (entregador, portal, backup), o adaptador web dos módulos e,
+  no pacote `blatt-plataforma`, os utilitários de fatos (PLAT-0019) e a base web (PLAT-0021).
 
 ### A-06. Status das ADRs de plataforma ainda propostas
 
@@ -139,12 +140,8 @@ Pendências para as quais as propostas de 12/11/2026 trazem a decisão. Saem daq
 
 | Pendência | Encaminhamento |
 | --- | --- |
-| A-01. Aceitar a PLAT-0015 (governança no `assembleia`) | A PLAT-0015 é substituída pela [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), que mantém as regras de governança (item 5); o aceite passa à A-08. |
 | A-02. Classificação das ADRs transferidas (a PLAT-0010 mistura regra comum e da folha) | Regra comum na [PLAT-0018](adr/PLAT-0018-dono-de-cada-dado-e-cadastro.md), item 1; parte da folha na FOLHA-0016 (A-14). As demais classificações de 03/11/2026 ficam como estavam. |
-| A-03. Distribuição do `blatt.comum` | Pacote `blatt-plataforma` instalado por tag do git; `blatt` como *namespace package*; fim das cópias e do manifesto ([PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), item 4). O obstáculo da credencial sumiu: o `assembleia` é público desde 12/11/2026. |
-| A-04. Antecipar o orquestrador (fase 2 da PLAT-0014) | O orquestrador dá lugar a um entregador sem banco próprio no `oper`, que entra em uso com o primeiro consumidor ([PLAT-0019](adr/PLAT-0019-integracao-por-fatos-e-entregador.md)). |
-| A-05. Decisões de plataforma na ASP-0006 | Mapa de módulos, divisão captura/tratamento e escopo do MVP da plataforma na [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), itens 2 e 3, citando a ASP-0006 (P-25 do aspirador). |
-| A-07. `blatt.infra` copiado e divergente | Versão canônica = a estendida do aspirador, dentro do `blatt-plataforma` ([PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), item 4) (P-20 do aspirador). |
+| A-04. Antecipar o orquestrador (fase 2 da PLAT-0014) | O orquestrador dá lugar a um entregador sem banco próprio no `oper`, que entra em uso com o primeiro consumidor ([PLAT-0019](adr/PLAT-0019-integracao-por-fatos-e-entregador.md)). A parte do papel do `oper` (deixa de ser orquestrador) já foi resolvida pela PLAT-0016 (ver Resolvidas); o entregador espera o aceite da PLAT-0019. |
 | P-33 (b) do aspirador: `fiscal.nfe_manifestada` no índice de contratos | Feito em 12/11/2026 no [índice de contratos](contratos/README.md), com os demais fatos que o aspirador publica. A parte (a) é a A-15. |
 
 ## Resolvidas
@@ -152,4 +149,10 @@ Pendências para as quais as propostas de 12/11/2026 trazem a decisão. Saem daq
 | Data | Decisão | Registro |
 | --- | --- | --- |
 | 2026-11-03 | **PLAT-0014 aceita** pelo Marcello ("adr 0014 aceita"), com o faseamento dos itens 10 e 11 e o dono de cada dado do item 9. Decidida no repositório da folha (P-57), no mesmo dia da transferência; o aceite foi trazido para cá depois, com as notas de alteração parcial nas PLAT-0005, 0006, 0009 e 0010. | [PLAT-0014](adr/PLAT-0014-banco-por-modulo-e-orquestrador.md); blatt `e4352fc` (PR #19) |
-| 2026-11-12 | **Direção da reorganização** dada pelo Marcello: repositórios separados (monorepo descartado), `oper` como operação da instância, entregador no lugar do orquestrador, servidor doméstico com Docker Compose e acesso só pela rede local, interface web, backup em três camadas com restic para disco local e Google Drive, cadastro geral centralizado com os dados sensíveis dos trabalhadores só na folha. | Propostas PLAT-0016 a PLAT-0022 (aceite na A-08) |
+| 2026-11-12 | **PLAT-0016 aceita** pelo Marcello ("plat-0016 aprovada"): um papel por repositório, mapa de módulos, escopo do primeiro MVP, código comum no pacote `blatt-plataforma` instalado por tag do git, `blatt` como *namespace package*, governança mantida da PLAT-0015. A PLAT-0015 passa a substituída. | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md); A-08 |
+| 2026-11-12 | **A-01** (aceitar a PLAT-0015): perde o objeto; a PLAT-0015 é substituída pela PLAT-0016, aceita, que mantém as regras de governança no item 5. | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), item 5 |
+| 2026-11-12 | **A-03** (distribuição do `blatt.comum`): pacote `blatt-plataforma` instalado por tag do git do `assembleia` (público desde 12/11/2026, sem credencial); `blatt` como *namespace package*; fim das cópias e do manifesto. | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), item 4 |
+| 2026-11-12 | **A-04, em parte** (antecipar o orquestrador): o `oper` deixa de ser orquestrador, sem banco de integração nem regra de negócio. O entregador que o substitui continua encaminhado, à espera da PLAT-0019. | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), item 1 |
+| 2026-11-12 | **A-05** (decisões de plataforma na ASP-0006): mapa de módulos, divisão captura/tratamento e escopo do primeiro MVP passam à plataforma, citando a ASP-0006 (P-25 do aspirador). | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), itens 2 e 3 |
+| 2026-11-12 | **A-07** (`blatt.infra` copiado e divergente): a versão canônica é a estendida do aspirador, dentro do `blatt-plataforma` (P-20 do aspirador). | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), item 4 |
+| 2026-11-12 | **Direção da reorganização** dada pelo Marcello: repositórios separados (monorepo descartado), `oper` como operação da instância, entregador no lugar do orquestrador, servidor doméstico com Docker Compose e acesso só pela rede local, interface web, backup em três camadas com restic para disco local e Google Drive, cadastro geral centralizado com os dados sensíveis dos trabalhadores só na folha. | PLAT-0016 (aceita) e propostas PLAT-0017 a PLAT-0022 (aceite na A-08) |

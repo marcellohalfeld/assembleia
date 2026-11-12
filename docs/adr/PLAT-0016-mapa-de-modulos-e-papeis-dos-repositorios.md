@@ -1,6 +1,6 @@
 # PLAT-0016: Mapa de módulos, papel de cada repositório e código comum como pacote
 
-- **Status:** Proposta
+- **Status:** Aceita (12/11/2026: "plat-0016 aprovada")
 - **Data:** 2026-11-12
 - **Decisor:** Marcello
 - **Substitui:** [PLAT-0015](PLAT-0015-governanca-no-assembleia.md) (inteira) e o item 8 da

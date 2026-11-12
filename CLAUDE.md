@@ -1,13 +1,13 @@
 # Assembleia — instruções para sessões do Claude Code
 
 Repositório das **regras** da plataforma Blatt. Aqui ficam as decisões que valem para todos os
-módulos e, pela PLAT-0016 (proposta), o código comum sem regra de negócio; os módulos ficam nos
+módulos e, pela PLAT-0016, o código comum sem regra de negócio; os módulos ficam nos
 repositórios deles (tabela no `README.md`). Comece por `docs/PENDENCIAS.md` e
 `docs/adr/README.md`.
 
-> Os papéis abaixo seguem a PLAT-0016, proposta em 12/11/2026. **Valem quando ela for aceita**;
-> até lá, vale a PLAT-0015 (o `assembleia` sem código além do `comum/` e o `oper` como
-> orquestrador). Não crie o pacote `blatt-plataforma` antes do aceite (etapa 1).
+> Os papéis abaixo seguem a PLAT-0016, aceita em 12/11/2026 (substitui a PLAT-0015). Os
+> utilitários de fatos e a base da interface web só entram no pacote depois do aceite das
+> PLAT-0019 e PLAT-0021, ainda propostas.
 
 ## O que entra aqui
 
