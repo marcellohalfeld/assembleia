@@ -20,7 +20,8 @@ Os módulos instalam este pacote pelo git; não copiam `blatt.comum` nem `blatt.
   Cada módulo guarda as suas migrações (`sql/NNNN_nome.sql`) no próprio pacote e informa o nome
   dele, por exemplo `aplicar(conexao, "blatt.fiscal.aspirador.adaptadores.postgres")`.
 - **Ainda não tem:** utilitários de fatos (`outbox`/`inbox`, PLAT-0019) e a base da interface
-  web (PLAT-0021). Entram depois do aceite dessas ADRs, numa versão nova.
+  web (PLAT-0021), previstos pela PLAT-0016, item 4. Entram numa versão nova, numa etapa
+  seguinte.
 - **Dependência:** `psycopg[binary]`, importado por `blatt.infra.postgres.migracoes` (LGPL, com
   a exceção nominal da [PLAT-0008](../../docs/adr/PLAT-0008-driver-postgresql-psycopg.md)).
 

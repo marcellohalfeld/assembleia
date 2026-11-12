@@ -1,6 +1,6 @@
 # PLAT-0017: Persistência em PostgreSQL — um banco por módulo, SQL explícito, migrações e tenant
 
-- **Status:** Proposta
+- **Status:** Aceita (12/11/2026: "plat-0017 a 0022 aprovadas")
 - **Data:** 2026-11-12
 - **Decisor:** Marcello
 - **Substitui:** [PLAT-0009](PLAT-0009-persistencia-postgresql.md) (inteira; o item 8, núcleo

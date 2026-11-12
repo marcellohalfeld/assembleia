@@ -1,6 +1,6 @@
 # PLAT-0020: Infraestrutura aberta e implantação por Docker Compose num servidor da rede local
 
-- **Status:** Proposta
+- **Status:** Aceita (12/11/2026: "plat-0017 a 0022 aprovadas")
 - **Data:** 2026-11-12
 - **Decisor:** Marcello
 - **Substitui:** [PLAT-0006](PLAT-0006-infraestrutura-aberta.md) (inteira; a linha "Fila de

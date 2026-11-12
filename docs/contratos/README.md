@@ -1,7 +1,7 @@
 # Índice dos contratos de eventos
 
 O schema de cada fato é mantido **por quem o publica**, no repositório dele, em
-`contratos/eventos/<tipo>/<versao>.schema.json` (PLAT-0014, item 7; na proposta
+`contratos/eventos/<tipo>/<versao>.schema.json` (PLAT-0014, item 7; na
 [PLAT-0019](../adr/PLAT-0019-integracao-por-fatos-e-entregador.md), item 4, sem mudança). Este
 índice só lista o que existe e onde, para que um consumidor encontre o contrato sem procurar em
 cada repositório. Quem publica um tipo novo ou uma versão nova atualiza esta tabela no mesmo

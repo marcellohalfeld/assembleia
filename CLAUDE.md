@@ -5,9 +5,9 @@ módulos e, pela PLAT-0016, o código comum sem regra de negócio; os módulos f
 repositórios deles (tabela no `README.md`). Comece por `docs/PENDENCIAS.md` e
 `docs/adr/README.md`.
 
-> Os papéis abaixo seguem a PLAT-0016, aceita em 12/11/2026 (substitui a PLAT-0015). Os
-> utilitários de fatos e a base da interface web só entram no pacote depois do aceite das
-> PLAT-0019 e PLAT-0021, ainda propostas.
+> Os papéis abaixo seguem a PLAT-0016, aceita em 12/11/2026 (substitui a PLAT-0015). As
+> PLAT-0017 a 0022 foram aceitas no mesmo dia. Os utilitários de fatos (PLAT-0019) e a base da
+> interface web (PLAT-0021) entram no pacote numa etapa seguinte, cada um com o seu PR.
 
 ## O que entra aqui
 

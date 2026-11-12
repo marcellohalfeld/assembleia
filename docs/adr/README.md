@@ -16,9 +16,8 @@ Regras (PLAT-0016, item 5, mantidas da PLAT-0015):
 
 ## Conjunto vigente
 
-As ADRs de 12/11/2026 (PLAT-0016 a PLAT-0022) reorganizam a plataforma e, à medida que forem
-aceitas, formam com as anteriores que não foram substituídas o conjunto que vale. A PLAT-0016
-foi aceita em 12/11/2026; as PLAT-0017 a 0022 continuam propostas:
+As ADRs de 12/11/2026 (PLAT-0016 a PLAT-0022), aceitas nesse dia, reorganizam a plataforma e
+formam, com as anteriores que não foram substituídas, o conjunto que vale:
 
 | Tema | ADR |
 | --- | --- |
@@ -34,10 +33,10 @@ foi aceita em 12/11/2026; as PLAT-0017 a 0022 continuam propostas:
 | Interface web | [PLAT-0021](PLAT-0021-interface-web.md) |
 | Backup | [PLAT-0022](PLAT-0022-backup-arquivo-imutavel-e-dossies.md) |
 
-A PLAT-0016, aceita, substitui a PLAT-0015. **Enquanto as PLAT-0017 a 0022 forem propostas,
-valem as antigas** (PLAT-0005, 0006, 0009, 0010 e 0014), cujo status já aponta para a
-substituta. A PLAT-0019 muda uma decisão
-aceita (o orquestrador da PLAT-0014) e pede atenção no aceite (pendência A-08).
+As PLAT-0005, 0006, 0009, 0014 e 0015 estão substituídas e valem só como histórico. A
+PLAT-0010 continua valendo na parte só da folha até existir a FOLHA-0016 (pendência A-14). A
+PLAT-0019 trocou o orquestrador da PLAT-0014 pelo entregador. As PLAT-0001 a 0004 seguem em
+status Proposta, embora o código as siga (pendência A-06).
 
 ## Índice
 
@@ -47,20 +46,20 @@ aceita (o orquestrador da PLAT-0014) e pede atenção no aceite (pendência A-08
 | [PLAT-0002](PLAT-0002-arquitetura-hexagonal.md) | Arquitetura hexagonal | Proposta |
 | [PLAT-0003](PLAT-0003-contrato-dos-parametros-externos.md) | Contrato dos parâmetros externos | Proposta |
 | [PLAT-0004](PLAT-0004-instancia-por-escritorio.md) | Uma instância por escritório, com `tenant_id` | Proposta |
-| [PLAT-0005](PLAT-0005-cadastro-interno-extraivel.md) | Cadastro interno, desenhado para extração | Substituída pela PLAT-0018 (proposta) |
-| [PLAT-0006](PLAT-0006-infraestrutura-aberta.md) | Infraestrutura aberta | Substituída pela PLAT-0020 (proposta) |
+| [PLAT-0005](PLAT-0005-cadastro-interno-extraivel.md) | Cadastro interno, desenhado para extração | Substituída pela PLAT-0018 (aceita em 12/11/2026) |
+| [PLAT-0006](PLAT-0006-infraestrutura-aberta.md) | Infraestrutura aberta | Substituída pela PLAT-0020 (aceita em 12/11/2026) |
 | [PLAT-0008](PLAT-0008-driver-postgresql-psycopg.md) | Driver do PostgreSQL: psycopg (exceção LGPL) | Aceita |
-| [PLAT-0009](PLAT-0009-persistencia-postgresql.md) | Persistência em PostgreSQL: SQL explícito, migrações e tenant | Substituída pela PLAT-0017 e, no item 8, pela PLAT-0016 (propostas) |
-| [PLAT-0010](PLAT-0010-vinculos-e-dados-pessoais.md) | Vínculos e dados pessoais no banco, com histórico por data | Aceita; regra comum substituída pela PLAT-0018 (proposta); parte da folha a virar FOLHA-0016 |
-| [PLAT-0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) | Um banco por módulo e integração por orquestrador; dados pessoais dos trabalhadores só na folha, empresa e sócios no cadastro | Aceita (03/11/2026, P-57 da folha); substituída pelas PLAT-0017, 0018 e 0019 (propostas) |
+| [PLAT-0009](PLAT-0009-persistencia-postgresql.md) | Persistência em PostgreSQL: SQL explícito, migrações e tenant | Substituída pela PLAT-0017 e, no item 8, pela PLAT-0016 (aceitas em 12/11/2026) |
+| [PLAT-0010](PLAT-0010-vinculos-e-dados-pessoais.md) | Vínculos e dados pessoais no banco, com histórico por data | Aceita; regra comum substituída pela PLAT-0018 (aceita em 12/11/2026); parte da folha a virar FOLHA-0016 |
+| [PLAT-0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) | Um banco por módulo e integração por orquestrador; dados pessoais dos trabalhadores só na folha, empresa e sócios no cadastro | Aceita (03/11/2026, P-57 da folha); substituída pelas PLAT-0017, 0018 e 0019 (aceitas em 12/11/2026) |
 | [PLAT-0015](PLAT-0015-governanca-no-assembleia.md) | Decisões de plataforma num repositório próprio, o `assembleia` | Substituída pela PLAT-0016 (aceita em 12/11/2026) |
 | [PLAT-0016](PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) | Mapa de módulos, papel de cada repositório e código comum como pacote | Aceita (12/11/2026) |
-| [PLAT-0017](PLAT-0017-persistencia-postgresql.md) | Persistência em PostgreSQL: um banco por módulo, SQL explícito, migrações e tenant | Proposta |
-| [PLAT-0018](PLAT-0018-dono-de-cada-dado-e-cadastro.md) | Dono de cada dado, histórico por vigência e cadastro geral | Proposta |
-| [PLAT-0019](PLAT-0019-integracao-por-fatos-e-entregador.md) | Integração por fatos: outbox, inbox e um entregador sem banco próprio | Proposta (altera a PLAT-0014, aceita) |
-| [PLAT-0020](PLAT-0020-infraestrutura-e-implantacao.md) | Infraestrutura aberta e implantação por Docker Compose na rede local | Proposta |
-| [PLAT-0021](PLAT-0021-interface-web.md) | Interface web: adaptador web em cada módulo e um portal no `oper` | Proposta |
-| [PLAT-0022](PLAT-0022-backup-arquivo-imutavel-e-dossies.md) | Backup em três camadas: arquivo imutável, cópia dos bancos e dossiês | Proposta |
+| [PLAT-0017](PLAT-0017-persistencia-postgresql.md) | Persistência em PostgreSQL: um banco por módulo, SQL explícito, migrações e tenant | Aceita (12/11/2026) |
+| [PLAT-0018](PLAT-0018-dono-de-cada-dado-e-cadastro.md) | Dono de cada dado, histórico por vigência e cadastro geral | Aceita (12/11/2026) |
+| [PLAT-0019](PLAT-0019-integracao-por-fatos-e-entregador.md) | Integração por fatos: outbox, inbox e um entregador sem banco próprio | Aceita (12/11/2026; altera a PLAT-0014) |
+| [PLAT-0020](PLAT-0020-infraestrutura-e-implantacao.md) | Infraestrutura aberta e implantação por Docker Compose na rede local | Aceita (12/11/2026) |
+| [PLAT-0021](PLAT-0021-interface-web.md) | Interface web: adaptador web em cada módulo e um portal no `oper` | Aceita (12/11/2026) |
+| [PLAT-0022](PLAT-0022-backup-arquivo-imutavel-e-dossies.md) | Backup em três camadas: arquivo imutável, cópia dos bancos e dossiês | Aceita (12/11/2026) |
 
 ## Tabela de correspondência
 

@@ -1,13 +1,14 @@
 # PLAT-0019: Integração por fatos — outbox, inbox e um entregador sem banco próprio
 
-> **Atenção: esta proposta altera uma ADR aceita.** Os itens 6 e 8 da
+> **Atenção: esta ADR altera uma ADR aceita.** Os itens 6 e 8 da
 > [PLAT-0014](PLAT-0014-banco-por-modulo-e-orquestrador.md), aceita pelo Marcello em
 > 03/11/2026 (P-57 da folha), previam um **orquestrador com banco próprio**, que registra cada
 > entrega. Esta ADR troca o orquestrador por um **entregador** sem banco próprio. O resto da
 > integração (outbox, inbox, envelope, contratos, dados pessoais fora dos fatos) é mantido sem
-> mudança de sentido. Até o Marcello decidir, vale a PLAT-0014.
+> mudança de sentido. O Marcello decidiu a troca e aceitou esta ADR em 12/11/2026 ("plat-0017 a
+> 0022 aprovadas"); a PLAT-0014 vale só no que esta e as PLAT-0017 e 0018 não substituem.
 
-- **Status:** Proposta
+- **Status:** Aceita (12/11/2026: "plat-0017 a 0022 aprovadas")
 - **Data:** 2026-11-12
 - **Decisor:** Marcello
 - **Substitui:** os itens 3 a 8, 10 e 11 da [PLAT-0014](PLAT-0014-banco-por-modulo-e-orquestrador.md)

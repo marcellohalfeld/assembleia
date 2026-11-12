@@ -1,6 +1,6 @@
 # PLAT-0021: Interface web — adaptador web em cada módulo e um portal no `oper`
 
-- **Status:** Proposta
+- **Status:** Aceita (12/11/2026: "plat-0017 a 0022 aprovadas")
 - **Data:** 2026-11-12
 - **Decisor:** Marcello
 - **Origem:** sessão de 12/11/2026 com o Marcello; a interface web é a próxima entrega, com

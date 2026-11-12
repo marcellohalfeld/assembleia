@@ -1,6 +1,6 @@
 # PLAT-0018: Dono de cada dado, histórico por vigência e cadastro geral
 
-- **Status:** Proposta
+- **Status:** Aceita (12/11/2026: "plat-0017 a 0022 aprovadas")
 - **Data:** 2026-11-12
 - **Decisor:** Marcello
 - **Substitui:** [PLAT-0005](PLAT-0005-cadastro-interno-extraivel.md) (inteira), a regra comum

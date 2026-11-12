@@ -9,13 +9,12 @@ negócio. Não tem código de módulo nem de operação.
 ## Repositórios da plataforma
 
 Papéis conforme a PLAT-0016 (aceita em 12/11/2026; substitui a
-[PLAT-0015](docs/adr/PLAT-0015-governanca-no-assembleia.md)). O que o `oper` fará pela
-integração, pelo portal e pelo backup depende das PLAT-0019, 0021 e 0022, ainda propostas; até o
-aceite da PLAT-0019, a integração continua a da PLAT-0014.
+[PLAT-0015](docs/adr/PLAT-0015-governanca-no-assembleia.md)). O que o `oper` faz pela
+integração, pelo portal e pelo backup está nas PLAT-0019, 0021 e 0022, aceitas no mesmo dia.
 
 | Repositório | Papel | ADRs |
 | --- | --- | --- |
-| [assembleia](https://github.com/marcellohalfeld/assembleia) | Regras: ADRs de plataforma, resumo, índice de contratos, pendências; pacote `blatt-plataforma` (`blatt.comum`, `blatt.infra`, utilitários de fatos, base da interface web) | `PLAT-` |
+| [assembleia](https://github.com/marcellohalfeld/assembleia) | Regras: ADRs de plataforma, resumo, índice de contratos, pendências; pacote `blatt-plataforma` (`blatt.comum`, `blatt.infra`; depois, utilitários de fatos e base da interface web) | `PLAT-` |
 | [oper](https://github.com/marcellohalfeld/oper) | Operação da instância: Docker Compose, provisionamento dos bancos, entregador de fatos, backup, agendamentos, portal web; sem regra de negócio | `OPER-` |
 | [blatt](https://github.com/marcellohalfeld/blatt) | Folha de pagamento + eSocial (e o cadastro, até a etapa do cadastro) | `FOLHA-` |
 | [aspirador](https://github.com/marcellohalfeld/aspirador) | `fiscal.aspirador`: captura de documentos fiscais eletrônicos | `ASP-` |

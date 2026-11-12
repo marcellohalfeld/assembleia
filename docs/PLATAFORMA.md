@@ -1,10 +1,7 @@
 # Plataforma Blatt: regras comuns
 
-> **Aviso.** Este resumo reflete as ADRs de 12/11/2026 (PLAT-0016 a PLAT-0022). A PLAT-0016
-> foi **aceita** em 12/11/2026; as PLAT-0017 a 0022 continuam **pendentes de aceite**
-> (pendência A-08). Até o aceite de cada uma, vale a ADR que ela substitui (PLAT-0005, 0006,
-> 0009, 0010 e 0014); em especial, a troca do orquestrador pelo entregador (PLAT-0019) altera
-> uma decisão aceita. Quando este resumo e uma ADR divergirem, vale a ADR.
+> Este resumo reflete as ADRs aceitas, inclusive as PLAT-0016 a PLAT-0022, aceitas em
+> 12/11/2026. Quando este resumo e uma ADR divergirem, vale a ADR.
 
 Resumo, por tema, das regras que valem para todos os módulos da plataforma e do que um módulo
 precisa respeitar para ser integrado sem reescrita. Cada item aponta para a ADR que o decide.
@@ -46,7 +43,7 @@ segue a decisão dele, registrada com a fonte.
 | Arquitetura | Hexagonal: `dominio` ← `aplicacao` ← `adaptadores`, verificada pelo `import-linter`; domínio sem I/O | [PLAT-0002](adr/PLAT-0002-arquitetura-hexagonal.md) |
 | Parâmetros legais | Fora do código, em JSON com JSON Schema, vigência real, base legal, fonte, conferência e manifesto SHA-256; números como texto decimal; resolução pelo período de referência de cada tributo (competência; mês de pagamento para IRRF), nunca pela data de hoje; fórmulas em código revisado | [PLAT-0003](adr/PLAT-0003-contrato-dos-parametros-externos.md) |
 | Instância e tenant | Uma instância por escritório; `tenant_id` em toda tabela de negócio, lido num único ponto | [PLAT-0004](adr/PLAT-0004-instancia-por-escritorio.md) |
-| Código comum | Pacote `blatt-plataforma` (`blatt.comum`, `blatt.infra`; utilitários de fatos e base web depois das PLAT-0019 e 0021), instalado por tag do git do `assembleia`; `blatt` como *namespace package*; sem regra de negócio. Instalação e versões: [`src/blatt/README.md`](../src/blatt/README.md) | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) |
+| Código comum | Pacote `blatt-plataforma` (hoje `blatt.comum` e `blatt.infra`; utilitários de fatos e base web numa versão seguinte), instalado por tag do git do `assembleia`; `blatt` como *namespace package*; sem regra de negócio. Instalação e versões: [`src/blatt/README.md`](../src/blatt/README.md) | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) |
 | Persistência | PostgreSQL, um banco e um usuário por módulo; SQL explícito; migrações por módulo (transação, *advisory lock*, SHA-256, só avança); FKs compostas com `tenant_id`; transação de quem chama; `numeric(15,2)`/`Decimal`; testes contra PostgreSQL real. Exceção datada: a folha, num banco com schemas `cadastro` e `folha`, até a etapa do cadastro | [PLAT-0017](adr/PLAT-0017-persistencia-postgresql.md) |
 | Dono de cada dado | Histórico por data de vigência, só acrescentado. Dado pessoal fica só no módulo que o usa e não vai nos fatos; dados pessoais dos trabalhadores só na folha; empresa e quadro societário num cadastro geral | [PLAT-0018](adr/PLAT-0018-dono-de-cada-dado-e-cadastro.md) |
 | Integração | Fatos no passado, `outbox` na mesma transação do dado, `inbox` idempotente; envelope comum; JSON Schema versionado por quem publica; nenhum módulo lê tabela de negócio de outro; entregador sem regra de negócio e sem banco próprio, com cursor no destino | [PLAT-0019](adr/PLAT-0019-integracao-por-fatos-e-entregador.md) |
@@ -186,7 +183,7 @@ uv sync && uv run ruff check . && uv run ruff format --check . \
 
 ## 9. O que ainda está em aberto
 
-Ver [PENDENCIAS](PENDENCIAS.md): aceite das propostas (A-08) e das PLAT-0001 a 0004 (A-06),
+Ver [PENDENCIAS](PENDENCIAS.md): aceite das PLAT-0001 a 0004 (A-06),
 desenho do cadastro (A-09), guarda do A1 (A-10), perda máxima do backup (A-11), retenção e
 prazos legais (A-12), licenças 0BSD e imagens (A-13), FOLHA-0016 (A-14), `mes_do_evento`
 (A-15), branch padrão do aspirador (A-16), levar a reorganização aos módulos (A-17), tag
@@ -212,8 +209,7 @@ leia o código deles; os caminhos podem mudar sem que a regra mude:
 
 Até o módulo adotar o pacote `blatt-plataforma` (A-17 e A-18), ele continua com a cópia de
 `blatt.comum` e `blatt.infra` que já tem; o manifesto e o script de conferência saíram do
-`assembleia`, então a cópia não deve ser editada no módulo. Até o aceite da PLAT-0019, a
-integração é a da PLAT-0014.
+`assembleia`, então a cópia não deve ser editada no módulo.
 
 ```markdown
 ## Plataforma

@@ -1,6 +1,6 @@
 # PLAT-0022: Backup em três camadas — arquivo imutável, cópia dos bancos e dossiês legíveis
 
-- **Status:** Proposta
+- **Status:** Aceita (12/11/2026: "plat-0017 a 0022 aprovadas")
 - **Data:** 2026-11-12
 - **Decisor:** Marcello
 - **Origem:** sessão de 12/11/2026 com o Marcello: "backup como requisito absoluto", com o dado
