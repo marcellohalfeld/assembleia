@@ -2,9 +2,7 @@
 
 > Transferida de `marcellohalfeld/blatt` (`docs/adr/0009-persistencia-postgresql.md`, commit `2bcff8e`; atualizada para `e4352fc`, com o aceite da PLAT-0014 em 03/11/2026, P-57) em 2026-11-03, pela [PLAT-0015](PLAT-0015-governanca-no-assembleia.md). Texto sem alteração, salvo o título e os links, que passaram a apontar para cá ou para o repositório da folha. Nas referências do texto, "ADR NNNN" é o número de origem: ver a tabela de correspondência no [README](README.md).
 
-- **Status:** Proposta.
-  Alterada em parte pela [ADR 0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) (aceita em
-  03/11/2026): itens 2 e 3, um banco por módulo em vez de um schema por módulo.
+- **Status:** Substituída pela [PLAT-0017](PLAT-0017-persistencia-postgresql.md) e, no item 8, pela [PLAT-0016](PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) (aceitas em 12/11/2026). Antes: Proposta, alterada em parte pela [ADR 0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) (aceita em 03/11/2026) nos itens 2 e 3.
 - **Data:** 2026-10-25
 - **Decisor:** Marcello
 

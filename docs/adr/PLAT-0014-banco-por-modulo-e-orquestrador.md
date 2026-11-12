@@ -2,8 +2,7 @@
 
 > Transferida de `marcellohalfeld/blatt` (`docs/adr/0014-banco-por-modulo-e-orquestrador.md`, commit `2bcff8e`; atualizada para `e4352fc`, com o aceite da PLAT-0014 em 03/11/2026, P-57) em 2026-11-03, pela [PLAT-0015](PLAT-0015-governanca-no-assembleia.md). Texto sem alteração, salvo o título e os links, que passaram a apontar para cá ou para o repositório da folha. Nas referências do texto, "ADR NNNN" é o número de origem: ver a tabela de correspondência no [README](README.md).
 
-- **Status:** Aceita (03/11/2026, P-57: "adr 0014 aceita"), com o faseamento dos itens 10 e 11 e o
-  dono de cada dado do item 9
+- **Status:** Substituída pelas [PLAT-0017](PLAT-0017-persistencia-postgresql.md) (itens 1 e 2), [PLAT-0018](PLAT-0018-dono-de-cada-dado-e-cadastro.md) (item 9) e [PLAT-0019](PLAT-0019-integracao-por-fatos-e-entregador.md) (itens 3 a 8, 10 e 11) (aceitas em 12/11/2026; a PLAT-0019 trocou o orquestrador aceito aqui pelo entregador). Antes: Aceita (03/11/2026, P-57: "adr 0014 aceita"), com o faseamento dos itens 10 e 11 e o dono de cada dado do item 9
 - **Data:** 2026-11-02
 - **Decisor:** Marcello
 - **Altera:** ADR 0005 (itens 1 a 3: o cadastro passa a ser o módulo da empresa e do quadro

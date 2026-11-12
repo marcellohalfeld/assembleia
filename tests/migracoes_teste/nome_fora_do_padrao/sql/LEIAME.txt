@@ -1,0 +1,1 @@
+Arquivos que não terminam em .sql são ignorados.

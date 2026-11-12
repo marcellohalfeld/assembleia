@@ -1,27 +1,37 @@
 # Assembleia
 
-Governança da plataforma Blatt: as decisões que valem para todos os módulos, o resumo delas e
-o núcleo comum. Não tem código de módulo nem do orquestrador
-([PLAT-0015](docs/adr/PLAT-0015-governanca-no-assembleia.md)).
+Regras da plataforma Blatt: as decisões que valem para todos os módulos, o resumo delas, o
+índice de contratos e as pendências. Pela
+[PLAT-0016](docs/adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) (aceita em
+12/11/2026), guarda também o pacote `blatt-plataforma`, com o código comum sem regra de
+negócio. Não tem código de módulo nem de operação.
 
 ## Repositórios da plataforma
 
+Papéis conforme a PLAT-0016 (aceita em 12/11/2026; substitui a
+[PLAT-0015](docs/adr/PLAT-0015-governanca-no-assembleia.md)). O que o `oper` faz pela
+integração, pelo portal e pelo backup está nas PLAT-0019, 0021 e 0022, aceitas no mesmo dia.
+
 | Repositório | Papel | ADRs |
 | --- | --- | --- |
-| [assembleia](https://github.com/marcellohalfeld/assembleia) | Decisões de plataforma, resumo, índice de contratos, `blatt.comum` canônico | `PLAT-` |
-| [blatt](https://github.com/marcellohalfeld/blatt) | Folha de pagamento + eSocial (e o cadastro, até a fase 2 da PLAT-0014) | `FOLHA-` |
+| [assembleia](https://github.com/marcellohalfeld/assembleia) | Regras: ADRs de plataforma, resumo, índice de contratos, pendências; pacote `blatt-plataforma` (`blatt.comum`, `blatt.infra`; depois, utilitários de fatos e base da interface web) | `PLAT-` |
+| [oper](https://github.com/marcellohalfeld/oper) | Operação da instância: Docker Compose, provisionamento dos bancos, entregador de fatos, backup, agendamentos, portal web; sem regra de negócio | `OPER-` |
+| [blatt](https://github.com/marcellohalfeld/blatt) | Folha de pagamento + eSocial (e o cadastro, até a etapa do cadastro) | `FOLHA-` |
 | [aspirador](https://github.com/marcellohalfeld/aspirador) | `fiscal.aspirador`: captura de documentos fiscais eletrônicos | `ASP-` |
-| [oper](https://github.com/marcellohalfeld/oper) | Orquestrador: lê `outbox`, roteia, entrega e registra; sem regra de negócio | `OPER-` |
+| a criar | `fiscal.escrituracao` (tratamento fiscal) e contábil | a definir |
 
 ## Onde está cada coisa
 
-- [`docs/PLATAFORMA.md`](docs/PLATAFORMA.md): resumo das decisões comuns e do que um módulo
+- [`docs/PLATAFORMA.md`](docs/PLATAFORMA.md): resumo das regras comuns e do que um módulo
   precisa respeitar. É o ponto de entrada para qualquer sessão de qualquer módulo.
-- [`docs/adr/`](docs/adr/README.md): ADRs `PLAT-` e a tabela de correspondência com os números
-  antigos.
+- [`docs/adr/`](docs/adr/README.md): ADRs `PLAT-`, o conjunto vigente e a tabela de
+  correspondência com os números antigos.
 - [`docs/contratos/README.md`](docs/contratos/README.md): índice dos fatos publicados por cada
   módulo (os schemas ficam com quem publica).
 - [`docs/PENDENCIAS.md`](docs/PENDENCIAS.md): pontos da plataforma que dependem do Marcello.
-- [`comum/`](comum/README.md): fonte canônica do `blatt.comum` e o manifesto de hashes.
-- [`scripts/conferir_comum.py`](scripts/conferir_comum.py): confere a cópia do comum num
-  módulo.
+- [`docs/ambiente-das-sessoes.md`](docs/ambiente-das-sessoes.md): notas práticas para as
+  sessões do Claude Code.
+- [`src/blatt/`](src/blatt/README.md): o pacote `blatt-plataforma` (hoje `blatt.comum` e
+  `blatt.infra`), com `pyproject.toml` na raiz e testes em `tests/`. O README do pacote explica
+  como um módulo o instala (`uv add "blatt-plataforma @ git+https://github.com/marcellohalfeld/assembleia@vX.Y.Z"`)
+  e como se publica uma versão nova.

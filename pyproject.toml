@@ -1,0 +1,87 @@
+[project]
+name = "blatt-plataforma"
+version = "0.1.0"
+description = "Código comum da plataforma Blatt, sem regra de negócio: blatt.comum e blatt.infra (PLAT-0016)"
+readme = "src/blatt/README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Marcello Halfeld" }]
+# Licença do próprio código: pendente, como na plataforma (docs/PLATAFORMA.md, PLAT-0001)
+dependencies = [
+    # blatt.infra.postgres.migracoes importa o psycopg; LGPL com exceção nominal (PLAT-0008).
+    "psycopg[binary]>=3.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "import-linter>=2.1",
+    "pip-licenses>=5",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# `blatt` é namespace package (PEP 420, PLAT-0016, item 4.3): não há src/blatt/__init__.py;
+# o wheel leva só blatt/comum e blatt/infra.
+[tool.hatch.build.targets.wheel]
+only-include = ["src/blatt/comum", "src/blatt/infra"]
+sources = ["src"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/blatt", "tests", "pyproject.toml", "uv.lock"]
+
+# --- Qualidade (igual à dos módulos, docs/PLATAFORMA.md seção 6) ----------------
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "S", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+# Sem src/blatt/__init__.py, o mypy precisa tratar `src` como raiz dos pacotes.
+explicit_package_bases = true
+namespace_packages = true
+packages = ["blatt.comum", "blatt.infra"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+
+# --- Fronteiras do pacote (PLAT-0016, item 4.1) ---------------------------------
+#
+# `blatt` é namespace package e é a raiz do grafo. Neste ambiente só existem blatt.comum e
+# blatt.infra; um import de qualquer outro `blatt.<x>` (folha, cadastro, fiscal, contabil...)
+# não acha o módulo e o grimp o registra como import do próprio `blatt`. Por isso o primeiro
+# contrato proíbe importar `blatt` sem tratar como pacote (as_packages = false): pega qualquer
+# módulo de negócio sem proibir blatt.comum e blatt.infra. Não dá para listar `blatt.folha` como
+# módulo externo: o import-linter 2.16 recusa subpacote de pacote externo. O teste
+# tests/test_fronteiras.py confere a mesma regra lendo os imports do código.
+
+[tool.importlinter]
+root_package = "blatt"
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "blatt.comum e blatt.infra não importam módulo de negócio"
+type = "forbidden"
+source_modules = ["blatt.comum", "blatt.comum.**", "blatt.infra", "blatt.infra.**"]
+forbidden_modules = ["blatt"]
+as_packages = false
+
+[[tool.importlinter.contracts]]
+name = "blatt.comum não importa blatt.infra"
+type = "forbidden"
+source_modules = ["blatt.comum"]
+forbidden_modules = ["blatt.infra"]

@@ -1,6 +1,6 @@
 # PLAT-0015: Decisões de plataforma num repositório próprio, o `assembleia`
 
-- **Status:** Proposta
+- **Status:** Substituída pela [PLAT-0016](PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) (aceita em 12/11/2026). Antes: Proposta
 - **Data:** 2026-11-03
 - **Origem:** sessão de 03/11/2026, a pedido do Marcello ("criei o repositório assembleia, que
   vai ser responsável pela governança da plataforma"). Altera a forma de registro das ADRs

@@ -2,9 +2,7 @@
 
 > Transferida de `marcellohalfeld/blatt` (`docs/adr/0006-infraestrutura-aberta.md`, commit `2bcff8e`; atualizada para `e4352fc`, com o aceite da PLAT-0014 em 03/11/2026, P-57) em 2026-11-03, pela [PLAT-0015](PLAT-0015-governanca-no-assembleia.md). Texto sem alteração, salvo o título e os links, que passaram a apontar para cá ou para o repositório da folha. Nas referências do texto, "ADR NNNN" é o número de origem: ver a tabela de correspondência no [README](README.md).
 
-- **Status:** Proposta.
-  Alterada em parte pela [ADR 0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) (aceita em
-  03/11/2026): linha "Fila de trabalho".
+- **Status:** Substituída pela [PLAT-0020](PLAT-0020-infraestrutura-e-implantacao.md) (aceita em 12/11/2026). Antes: Proposta, alterada em parte pela [ADR 0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) (aceita em 03/11/2026) na linha "Fila de trabalho".
 - **Data:** 2026-10-20
 - **Decisor:** Marcello
 
