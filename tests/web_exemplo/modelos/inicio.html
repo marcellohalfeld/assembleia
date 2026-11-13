@@ -1,0 +1,13 @@
+{% extends "blatt/base.html" %}
+{% block titulo %}Início{% endblock %}
+{% block conteudo %}
+  <h1>Exemplo</h1>
+  <p class="numero" id="valor">{{ valor | moeda }}</p>
+  <p id="cnpj">{{ "12345678000195" | cnpj }}</p>
+  <p id="competencia">{{ "2026-10" | competencia }}</p>
+  <form method="post" action="{{ url('salvar') }}">
+    {{ csrf_campo() }}
+    <input name="nome">
+    <button>Salvar</button>
+  </form>
+{% endblock %}

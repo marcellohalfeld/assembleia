@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - name: Instalar dependências
-        run: uv sync --locked
+      - name: Instalar dependências (com o extra web)
+        run: uv sync --locked --all-extras
       - name: Lint
         run: uv run ruff check .
       - name: Formatação
@@ -31,7 +31,7 @@ jobs:
           uv run pip-licenses --partial-match
           --ignore-packages psycopg psycopg-binary
           --fail-on="GNU Affero General Public License;AGPL;GNU General Public License;GPL"
-      - name: Wheel só com blatt.comum e blatt.infra, sem blatt/__init__.py
+      - name: Wheel com blatt.comum, blatt.infra e blatt.web, sem blatt/__init__.py
         run: |
           uv build --wheel -o dist
           python3 -m zipfile -l dist/*.whl
@@ -40,3 +40,7 @@ jobs:
           fi
           python3 -m zipfile -l dist/*.whl | grep -q '^blatt/comum/py.typed'
           python3 -m zipfile -l dist/*.whl | grep -q '^blatt/infra/py.typed'
+          python3 -m zipfile -l dist/*.whl | grep -q '^blatt/web/py.typed'
+          python3 -m zipfile -l dist/*.whl | grep -q '^blatt/web/estatico/htmx.min.js'
+          python3 -m zipfile -l dist/*.whl | grep -q '^blatt/web/estatico/blatt.css'
+          python3 -m zipfile -l dist/*.whl | grep -q '^blatt/web/modelos/blatt/base.html'

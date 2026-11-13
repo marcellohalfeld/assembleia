@@ -1,0 +1,7 @@
+{% extends "blatt/base.html" %}
+{% block titulo %}Erro {{ status }}{% endblock %}
+{% block conteudo %}
+  <h1>Não foi possível continuar</h1>
+  <p class="erro" role="alert">{{ mensagem }}</p>
+  <p><a href="{{ url() }}">Voltar ao início do módulo</a></p>
+{% endblock %}
