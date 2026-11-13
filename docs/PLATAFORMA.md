@@ -43,7 +43,7 @@ segue a decisão dele, registrada com a fonte.
 | Arquitetura | Hexagonal: `dominio` ← `aplicacao` ← `adaptadores`, verificada pelo `import-linter`; domínio sem I/O | [PLAT-0002](adr/PLAT-0002-arquitetura-hexagonal.md) |
 | Parâmetros legais | Fora do código, em JSON com JSON Schema, vigência real, base legal, fonte, conferência e manifesto SHA-256; números como texto decimal; resolução pelo período de referência de cada tributo (competência; mês de pagamento para IRRF), nunca pela data de hoje; fórmulas em código revisado | [PLAT-0003](adr/PLAT-0003-contrato-dos-parametros-externos.md) |
 | Instância e tenant | Uma instância por escritório; `tenant_id` em toda tabela de negócio, lido num único ponto | [PLAT-0004](adr/PLAT-0004-instancia-por-escritorio.md) |
-| Código comum | Pacote `blatt-plataforma` (hoje `blatt.comum` e `blatt.infra`; utilitários de fatos e base web numa versão seguinte), instalado por tag do git do `assembleia`; `blatt` como *namespace package*; sem regra de negócio. Instalação e versões: [`src/blatt/README.md`](../src/blatt/README.md) | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) |
+| Código comum | Pacote `blatt-plataforma` (0.2.0: `blatt.comum`; `blatt.infra` com configuração, arquivo imutável, migrações e fatos; `blatt.web` no extra `[web]`), instalado por tag do git do `assembleia`; `blatt` como *namespace package*; sem regra de negócio. Instalação, API e versões: [`src/blatt/README.md`](../src/blatt/README.md) | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) |
 | Persistência | PostgreSQL, um banco e um usuário por módulo; SQL explícito; migrações por módulo (transação, *advisory lock*, SHA-256, só avança); FKs compostas com `tenant_id`; transação de quem chama; `numeric(15,2)`/`Decimal`; testes contra PostgreSQL real. Exceção datada: a folha, num banco com schemas `cadastro` e `folha`, até a etapa do cadastro | [PLAT-0017](adr/PLAT-0017-persistencia-postgresql.md) |
 | Dono de cada dado | Histórico por data de vigência, só acrescentado. Dado pessoal fica só no módulo que o usa e não vai nos fatos; dados pessoais dos trabalhadores só na folha; empresa e quadro societário num cadastro geral | [PLAT-0018](adr/PLAT-0018-dono-de-cada-dado-e-cadastro.md) |
 | Integração | Fatos no passado, `outbox` na mesma transação do dado, `inbox` idempotente; envelope comum; JSON Schema versionado por quem publica; nenhum módulo lê tabela de negócio de outro; entregador sem regra de negócio e sem banco próprio, com cursor no destino | [PLAT-0019](adr/PLAT-0019-integracao-por-fatos-e-entregador.md) |
@@ -108,18 +108,24 @@ fatos. A folha tem o exemplo de adaptador-ponte enquanto o cadastro mora com ela
 - **Banco próprio** por módulo, usuário próprio, migrações `NNNN_nome.sql` a partir de 0001 no
   próprio pacote (diretório `sql/`), aplicadas por `blatt.infra.postgres.migracoes`, que recebe
   o nome desse pacote como parâmetro obrigatório (PLAT-0017).
-- **Configuração num único ponto** (`blatt.infra.configuracao`): `BLATT_TENANT_ID` e
-  `BLATT_DSN_<MODULO>`; a senha vem de arquivo de segredo (PLAT-0017, item 5; PLAT-0020).
+- **Configuração num único ponto** (`blatt.infra.configuracao`): `BLATT_TENANT_ID`,
+  `BLATT_DSN_<MODULO>`, `BLATT_DIR_ARQUIVO`, `BLATT_DIR_DADOS`, `BLATT_DIR_PARAMETROS` e
+  `BLATT_WEB_NAVEGACAO`; a senha vem de arquivo de segredo (PLAT-0017, item 5; PLAT-0020).
 - **Fatos** (PLAT-0019): o módulo que publica tem `outbox` (com `sequencia`) e o contrato em
   `contratos/eventos/`, listado no [índice de contratos](contratos/README.md); o que consome
   tem `inbox` e `entrega_cursor`. O entregador do `oper` copia da `outbox` para a `inbox`,
   com papel restrito a essas tabelas. Consulta síncrona a outro módulo só como exceção
-  justificada.
+  justificada. Envelope, SQL, DDL de referência (que o módulo copia para uma migração própria)
+  e a função de entrega estão em `blatt.infra.fatos`.
 - **Dados pessoais** (PLAT-0018): só no módulo que os usa; fatos levam informação agregada e,
   se preciso, um identificador opaco. Do cadastro, cada módulo guarda só empresa e quadro
   societário.
 - **Arquivos crus** trocados com órgão público vão para o arquivo imutável, com o SHA-256 no
-  banco; o fechamento de um período gera o dossiê legível (PLAT-0022).
+  banco; o fechamento de um período gera o dossiê legível (PLAT-0022). Gravação e leitura:
+  `blatt.infra.arquivo.ArquivoImutavel`; o layout e o índice são de cada módulo.
+- **Interface web** (PLAT-0021): o adaptador web usa `blatt.web.app.criar_app`, sob o prefixo
+  do módulo, na porta 8000; usuário no cabeçalho `X-Blatt-Usuario`, CSRF e upload sensível em
+  memória pela base. Contrato com o portal e o Caddy: [contratos/web.md](contratos/web.md).
 
 ## 5. Parâmetros legais
 
@@ -186,8 +192,9 @@ uv sync && uv run ruff check . && uv run ruff format --check . \
 Ver [PENDENCIAS](PENDENCIAS.md): aceite das PLAT-0001 a 0004 (A-06),
 desenho do cadastro (A-09), guarda do A1 para coleta agendada (A-10), prazos legais de guarda
 (A-12), licenças do software de sistema nas imagens (A-13), FOLHA-0016 (A-14), `mes_do_evento`
-(A-15), branch padrão do aspirador (A-16), levar a reorganização aos módulos (A-17), tag
-`v0.1.0` do `blatt-plataforma` (A-18).
+(A-15), branch padrão do aspirador (A-16), levar a reorganização aos módulos e adotar a 0.2.0
+(A-17), tag `v0.2.0` do `blatt-plataforma` (A-19), `ON CONFLICT` da `inbox` e coluna
+`ultimo_id` do cursor (A-20).
 
 ## 10. Implementação de referência
 
@@ -207,7 +214,7 @@ leia o código deles; os caminhos podem mudar sem que a regra mude:
 
 ## 11. Trecho para o `CLAUDE.md` de cada módulo
 
-Até o módulo adotar o pacote `blatt-plataforma` (A-17 e A-18), ele continua com a cópia de
+Até o módulo adotar o pacote `blatt-plataforma` (A-17), ele continua com a cópia de
 `blatt.comum` e `blatt.infra` que já tem; o manifesto e o script de conferência saíram do
 `assembleia`, então a cópia não deve ser editada no módulo.
 
@@ -227,8 +234,8 @@ Leia o resumo antes de qualquer decisão de arquitetura; não copie ADRs nem o r
 - Pacote `blatt.<modulo>`, camadas `dominio` ← `aplicacao` ← `adaptadores`, verificadas pelo
   `import-linter`; domínio sem I/O. A interface web é um adaptador (`adaptadores/web`) que
   chama os mesmos casos de uso da CLI (PLAT-0021).
-- `blatt.comum` e `blatt.infra` vêm do pacote `blatt-plataforma`, instalado por tag do
-  `assembleia`; não há `src/blatt/__init__.py` (PLAT-0016).
+- `blatt.comum`, `blatt.infra` e `blatt.web` vêm do pacote `blatt-plataforma`, instalado por
+  tag do `assembleia`; não há `src/blatt/__init__.py` (PLAT-0016).
 - Outros módulos só por ports definidos na aplicação deste módulo; nunca importar outro
   módulo; nunca ler tabela de negócio de outro módulo.
 - PostgreSQL com banco e usuário próprios, `tenant_id` em toda tabela, SQL explícito,

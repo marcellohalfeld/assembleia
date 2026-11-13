@@ -1,5 +1,7 @@
 # Índice dos contratos de eventos
 
+> Contrato da interface web (módulos, portal e Caddy): [web.md](web.md).
+
 O schema de cada fato é mantido **por quem o publica**, no repositório dele, em
 `contratos/eventos/<tipo>/<versao>.schema.json` (PLAT-0014, item 7; na
 [PLAT-0019](../adr/PLAT-0019-integracao-por-fatos-e-entregador.md), item 4, sem mudança). Este
