@@ -73,22 +73,8 @@ def aplicar(conexao: psycopg.Connection[TupleRow], pacote: str) -> list[int]:
             )
             """
         )
-        aplicadas = {
-            versao: sha
-            for versao, sha in conexao.execute(
-                "SELECT versao, sha256 FROM public.blatt_migracao"
-            ).fetchall()
-        }
-        alteradas = [
-            m.versao for m in migracoes if m.versao in aplicadas and aplicadas[m.versao] != m.sha256
-        ]
-        if alteradas:
-            raise ErroMigracao(f"migrações já aplicadas foram alteradas: {alteradas}")
-        desconhecidas = sorted(set(aplicadas) - {m.versao for m in migracoes})
-        if desconhecidas:
-            raise ErroMigracao(
-                f"o banco tem migrações que este código não conhece: {desconhecidas}"
-            )
+        aplicadas = _aplicadas(conexao)
+        _conferir_aplicadas(migracoes, aplicadas)
         novas = [m for m in migracoes if m.versao not in aplicadas]
         for migracao in novas:
             conexao.execute(migracao.sql.encode())
@@ -97,3 +83,41 @@ def aplicar(conexao: psycopg.Connection[TupleRow], pacote: str) -> list[int]:
                 (migracao.versao, migracao.nome, migracao.sha256),
             )
     return [m.versao for m in novas]
+
+
+def _aplicadas(conexao: psycopg.Connection[TupleRow]) -> dict[int, str]:
+    return {
+        versao: sha
+        for versao, sha in conexao.execute(
+            "SELECT versao, sha256 FROM public.blatt_migracao"
+        ).fetchall()
+    }
+
+
+def _conferir_aplicadas(migracoes: list[Migracao], aplicadas: dict[int, str]) -> None:
+    alteradas = [
+        m.versao for m in migracoes if m.versao in aplicadas and aplicadas[m.versao] != m.sha256
+    ]
+    if alteradas:
+        raise ErroMigracao(f"migrações já aplicadas foram alteradas: {alteradas}")
+    desconhecidas = sorted(set(aplicadas) - {m.versao for m in migracoes})
+    if desconhecidas:
+        raise ErroMigracao(f"o banco tem migrações que este código não conhece: {desconhecidas}")
+
+
+def conferir(conexao: psycopg.Connection[TupleRow], pacote: str) -> list[int]:
+    """Confere, **sem alterar nada**, as migrações aplicadas no banco contra as do ``pacote``.
+
+    Para o comando de verificação que o teste de restauração do ``oper`` chama contra um banco
+    restaurado (contrato da imagem de módulo, item 8; PLAT-0022, item 5.1; P-65 da folha).
+    Levanta ``ErroMigracao`` se uma migração aplicada foi alterada, se o banco tem migração que
+    o código não conhece ou se o banco nunca foi migrado (sem ``public.blatt_migracao``).
+    Devolve as versões ainda pendentes (lista vazia: banco em dia).
+    """
+    migracoes = disponiveis(pacote)
+    tabela = conexao.execute("SELECT to_regclass('public.blatt_migracao')").fetchone()
+    if tabela is None or tabela[0] is None:
+        raise ErroMigracao("o banco não tem public.blatt_migracao: nenhuma migração aplicada")
+    aplicadas = _aplicadas(conexao)
+    _conferir_aplicadas(migracoes, aplicadas)
+    return [m.versao for m in migracoes if m.versao not in aplicadas]
