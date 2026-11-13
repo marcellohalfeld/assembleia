@@ -136,7 +136,7 @@ funcionando.
 2. Subir `version` no `pyproject.toml` (mudança incompatível é versão maior nova) e rodar
    `uv lock`.
 3. Depois do merge, marcar a tag `vX.Y.Z` no commit de `main` e enviá-la (`git tag vX.Y.Z` e
-   `git push origin vX.Y.Z`). Tags são marcadas pelo Marcello (a da 0.2.0 é a pendência A-19).
+   `git push origin vX.Y.Z`). Tags são marcadas pelo Marcello.
 4. Em cada módulo, por PR, no ritmo dele: trocar a tag em `[tool.uv.sources]` (ou repetir o
    `uv add` com a tag nova), rodar `uv lock --upgrade-package blatt-plataforma` e as checagens.
 

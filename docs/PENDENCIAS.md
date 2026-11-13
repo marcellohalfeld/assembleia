@@ -94,7 +94,7 @@ Em PR de cada repositório (as PLAT-0016 a 0022 foram aceitas em 12/11/2026):
 - **todos** (PLAT-0016; passos conferidos num projeto mínimo, detalhe em
   [`src/blatt/README.md`](../src/blatt/README.md)):
   - `uv add "blatt-plataforma @ git+https://github.com/marcellohalfeld/assembleia@v0.1.0"`
-    (tag já marcada) ou, depois da A-19, `@v0.2.0`; com adaptador web,
+    (tag já marcada) ou `@v0.2.0`; com adaptador web,
     `"blatt-plataforma[web] @ ...@v0.2.0"`;
   - apagar `src/blatt/comum/`, `src/blatt/infra/` e `src/blatt/__init__.py`; trocar
     `src/blatt/py.typed` por um `py.typed` em cada subpacote do módulo;
@@ -128,7 +128,7 @@ Em PR de cada repositório (as PLAT-0016 a 0022 foram aceitas em 12/11/2026):
   hash do arquivo de originais (PLAT-0022);
 - **`oper`:** ADRs `OPER-` de implantação, entregador, portal e backup (PLAT-0019 a 0022).
 
-O que cada repositório faz para **adotar a 0.2.0** (depois da A-19; API em
+O que cada repositório faz para **adotar a 0.2.0** (tag marcada em 13/11/2026; API em
 [`src/blatt/README.md`](../src/blatt/README.md)):
 
 - **todos:** ler `BLATT_DIR_ARQUIVO`, `BLATT_DIR_DADOS` e `BLATT_DIR_PARAMETROS` só por
@@ -163,14 +163,6 @@ O que cada repositório faz para **adotar a 0.2.0** (depois da A-19; API em
   `http://localhost:8000/saude`; `BLATT_WEB_NAVEGACAO` no `environment` dos módulos; o
   provisionamento continua dando `CONNECT` e `USAGE` em `public` aos papéis de operação.
 
-### A-19. Marcar a tag `v0.2.0` do `blatt-plataforma`
-
-- **Hoje:** a versão 0.2.0 (arquivo imutável, configuração das pastas, conferência das
-  migrações, fatos e base web) está no branch `claude/elegant-lamport-wr5gbr`, sem tag.
-- **Falta:** depois do merge em `main`, o Marcello marca e envia a tag no commit de `main`
-  (`git tag v0.2.0` e `git push origin v0.2.0`).
-- **Bloqueia:** a adoção da 0.2.0 pelos módulos e pelo `oper` (A-17, segunda lista).
-
 ### A-20. Entrega de fatos: `ON CONFLICT` da `inbox` e o `ultimo_id` do cursor (PLAT-0019)
 
 Dois pontos em que a implementação da 0.2.0 (`blatt.infra.fatos`) completa a PLAT-0019 sem
@@ -197,6 +189,23 @@ mudar o sentido dela; ficam para o Marcello confirmar, e depois na ADR `OPER-` d
   copia o DDL de referência. Se o Marcello preferir a alternativa de (a), muda o DDL e o `INSERT`
   antes disso.
 
+### A-21. Wiki normativa: publicar as regras e os parâmetros que os módulos já guardam
+
+- **Origem:** etapa C3 e pendência A-10 do "plano de convergência" de 08/11/2026 (PR #2 deste
+  repositório, fechado em 13/11/2026 por ter sido superado pelas PLAT-0016 a PLAT-0022). É a
+  única parte daquele plano que as ADRs aceitas não cobrem.
+- **Contexto:** a folha já guarda as normas de forma estruturada (`parametros/tabelas/`, com
+  valor, vigência, base legal e hash; `docs/dominio/regras/`, com regra, interpretação adotada
+  e casos-ouro), e o aspirador começou a fazer o mesmo. Uma wiki escrita à mão seria mais uma
+  cópia que diverge.
+- **Proposta (do plano de 08/11, a rever):** ADR `PLAT-` que faça desses formatos um contrato de
+  todos os módulos e defina a wiki como páginas geradas a partir deles, separando norma (link
+  oficial), parâmetro (valor, vigência, hash) e interpretação adotada (quem decidiu, quando, com
+  que fonte). Com a PLAT-0021, o lugar natural é o portal ou uma página de cada módulo, com o
+  mesmo login, em vez de um repositório novo.
+- **Decisão aberta:** se a parte normativa pode ser publicada fora da instância (D5 do plano).
+- **Bloqueia:** nada; é entrega nova, a priorizar pelo Marcello.
+
 ## Resolvidas
 
 | Data | Decisão | Registro |
@@ -219,3 +228,5 @@ mudar o sentido dela; ficam para o Marcello confirmar, e depois na ADR `OPER-` d
 | 2026-11-12 | **Direção da reorganização** dada pelo Marcello: repositórios separados (monorepo descartado), `oper` como operação da instância, entregador no lugar do orquestrador, servidor doméstico com Docker Compose e acesso só pela rede local, interface web, backup em três camadas com restic para disco local e Google Drive, cadastro geral centralizado com os dados sensíveis dos trabalhadores só na folha. | PLAT-0016 a PLAT-0022 (aceitas em 12/11/2026) |
 | 2026-11-13 | **A-18** (tag `v0.1.0`): marcada pelo Marcello em `main` (`f05bdb6`) e enviada. | `git ls-remote --tags origin` (13/11/2026) |
 | 2026-11-13 | **P-65 da folha, itens (a), (b) e (d)**, do lado do pacote: `dir_arquivo`, `dir_dados`, `dir_parametros` em `blatt.infra.configuracao`; `conferir()` nas migrações; `blatt.infra.arquivo.ArquivoImutavel`. A adoção na folha e o item (c), no `oper`, seguem na A-17. | [`src/blatt/README.md`](../src/blatt/README.md), versão 0.2.0 |
+| 2026-11-13 | **A-19** (tag `v0.2.0`): marcada pelo Marcello em `main` (`5a3091d`, merge do PR #4) e enviada. | `git ls-remote --tags origin` (13/11/2026) |
+| 2026-11-13 | **Plano de convergência de 08/11/2026 (PR #2) fechado sem merge**, a pedido do Marcello: as etapas C0, C1, C2, C4, C5 e C7 foram decididas de outra forma nas PLAT-0016 a PLAT-0022 (pacote no lugar das cópias, operação no `oper`, adaptador web por módulo no lugar de API e repositório de interface, entregador no lugar do orquestrador); a C6 é a A-10; a C8 é a A-09; a C3 (wiki normativa) virou a A-21. | A-21; PLAT-0016 a PLAT-0022 |
