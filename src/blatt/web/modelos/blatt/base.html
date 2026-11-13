@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="htmx-config" content='{"allowEval": false, "allowScriptTags": false, "includeIndicatorStyles": false}'>
+  <title>{% block titulo %}{{ titulo_modulo }}{% endblock %} · Blatt</title>
+  <link rel="stylesheet" href="{{ estatico('blatt.css') }}">
+  <script src="{{ estatico('htmx.min.js') }}" defer></script>
+  {% block cabeca %}{% endblock %}
+</head>
+<body hx-headers='{"X-Blatt-CSRF": "{{ csrf_token }}"}'>
+  <header class="topo">
+    <div class="conteudo">
+      <a class="marca" href="/">Blatt</a>
+      <nav aria-label="Módulos">
+        <ul>
+        {% for titulo_item, caminho in navegacao %}
+          <li><a href="{{ caminho }}"{% if caminho != "/" and caminho_atual.startswith(caminho) %} aria-current="page"{% endif %}>{{ titulo_item }}</a></li>
+        {% endfor %}
+        </ul>
+      </nav>
+      {% if usuario %}<span class="usuario">{{ usuario }}</span>{% endif %}
+    </div>
+  </header>
+  <main class="conteudo" id="conteudo">
+    {% block conteudo %}{% endblock %}
+  </main>
+  <footer class="rodape">
+    <div class="conteudo">{{ titulo_modulo }} {{ versao }} · blatt-plataforma {{ versao_plataforma }}</div>
+  </footer>
+</body>
+</html>

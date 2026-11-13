@@ -1,0 +1,99 @@
+/* Base visual da plataforma Blatt (PLAT-0021, item 6). Sóbria e legível; sem framework. */
+
+:root {
+  --texto: #1d2329;
+  --texto-suave: #57606a;
+  --fundo: #ffffff;
+  --fundo-suave: #f4f5f7;
+  --borda: #d0d7de;
+  --destaque: #1f4e79;
+  --destaque-claro: #e8eef5;
+  --erro: #9b1c1c;
+  --erro-fundo: #fdecec;
+  --ok: #1d5e2e;
+  --ok-fundo: #e9f5ec;
+  --aviso: #7a4d00;
+  --aviso-fundo: #fff4dc;
+  --raio: 4px;
+  --largura: 72rem;
+  font-size: 100%;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--texto);
+  background: var(--fundo);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a { color: var(--destaque); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible { outline: 3px solid #86a8cc; outline-offset: 1px; }
+
+/* Cabeçalho com a navegação entre módulos */
+.topo { background: var(--destaque); color: #fff; }
+.topo .conteudo { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+  padding-top: .6rem; padding-bottom: .6rem; }
+.topo .marca { font-weight: 700; letter-spacing: .02em; color: #fff; text-decoration: none; }
+.topo nav ul { list-style: none; display: flex; gap: .25rem; margin: 0; padding: 0; flex-wrap: wrap; }
+.topo nav a { color: #fff; text-decoration: none; padding: .3rem .7rem; border-radius: var(--raio); }
+.topo nav a:hover { background: rgba(255, 255, 255, .15); }
+.topo nav a[aria-current="page"] { background: rgba(255, 255, 255, .25); }
+.topo .usuario { margin-left: auto; font-size: .9rem; opacity: .9; }
+
+.conteudo { max-width: var(--largura); margin: 0 auto; padding: 0 1.25rem; width: 100%; }
+main.conteudo { flex: 1; padding-top: 1.5rem; padding-bottom: 2rem; }
+
+h1 { font-size: 1.6rem; margin: 0 0 1rem; }
+h2 { font-size: 1.25rem; margin: 1.75rem 0 .75rem; }
+h3 { font-size: 1.05rem; margin: 1.25rem 0 .5rem; }
+p { margin: 0 0 1rem; }
+
+/* Tabelas: números alinhados à direita, com algarismos de largura fixa */
+table { border-collapse: collapse; width: 100%; margin: 0 0 1.25rem; font-size: .95rem; }
+th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--borda); vertical-align: top; }
+thead th { background: var(--fundo-suave); font-weight: 600; border-bottom: 2px solid var(--borda); }
+td.numero, th.numero, .numero { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tbody tr:hover { background: var(--fundo-suave); }
+
+/* Formulários */
+form { margin: 0 0 1.25rem; }
+.campo { margin: 0 0 1rem; display: flex; flex-direction: column; gap: .25rem; max-width: 32rem; }
+label { font-weight: 600; }
+.ajuda { color: var(--texto-suave); font-size: .875rem; }
+input, select, textarea {
+  font: inherit; color: inherit; padding: .45rem .6rem;
+  border: 1px solid var(--borda); border-radius: var(--raio); background: #fff;
+}
+button, .botao {
+  font: inherit; cursor: pointer; padding: .5rem 1rem; border-radius: var(--raio);
+  border: 1px solid var(--destaque); background: var(--destaque); color: #fff; text-decoration: none;
+  display: inline-block;
+}
+button.secundario, .botao.secundario { background: #fff; color: var(--destaque); }
+button[disabled] { opacity: .6; cursor: not-allowed; }
+
+/* Mensagens */
+.aviso, .erro, .ok { padding: .75rem 1rem; border-radius: var(--raio); margin: 0 0 1rem; border-left: 4px solid; }
+.erro { background: var(--erro-fundo); border-color: var(--erro); color: var(--erro); }
+.ok { background: var(--ok-fundo); border-color: var(--ok); color: var(--ok); }
+.aviso { background: var(--aviso-fundo); border-color: var(--aviso); color: var(--aviso); }
+
+/* htmx: indicador de carregamento (o estilo em linha do htmx está desligado) */
+.htmx-indicator { opacity: 0; transition: opacity 200ms ease-in; }
+.htmx-request .htmx-indicator, .htmx-request.htmx-indicator { opacity: 1; }
+
+.rodape { border-top: 1px solid var(--borda); color: var(--texto-suave); font-size: .85rem;
+  padding-top: .75rem; padding-bottom: .75rem; }
+
+@media print {
+  .topo nav, .topo .usuario, button, .botao { display: none; }
+  .topo { background: none; color: var(--texto); }
+  .topo .marca { color: var(--texto); }
+}

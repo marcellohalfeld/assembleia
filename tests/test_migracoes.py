@@ -13,7 +13,7 @@ import pytest
 from psycopg.rows import TupleRow
 
 from blatt.infra.postgres import migracoes
-from blatt.infra.postgres.migracoes import ErroMigracao, Migracao, aplicar, disponiveis
+from blatt.infra.postgres.migracoes import ErroMigracao, Migracao, aplicar, conferir, disponiveis
 
 VALIDAS = "tests.migracoes_teste.validas"
 SO_A_PRIMEIRA = "tests.migracoes_teste.so_a_primeira"
@@ -124,3 +124,41 @@ def test_falha_no_meio_nao_deixa_nada_aplicado(
         aplicar(banco, VALIDAS)
     banco.rollback()
     assert _tabelas(banco) == set()
+
+
+# --- conferir (só leitura; P-65 da folha, contrato da imagem do oper, item 8) -----------------
+
+
+def test_conferir_banco_em_dia(banco: psycopg.Connection[TupleRow]) -> None:
+    aplicar(banco, VALIDAS)
+    banco.commit()
+    assert conferir(banco, VALIDAS) == []
+
+
+def test_conferir_mostra_as_pendentes_sem_aplicar(banco: psycopg.Connection[TupleRow]) -> None:
+    aplicar(banco, SO_A_PRIMEIRA)
+    assert conferir(banco, VALIDAS) == [2]
+    assert "nome" not in {
+        linha[0]
+        for linha in banco.execute(
+            "SELECT column_name FROM information_schema.columns WHERE table_name = 'exemplo'"
+        ).fetchall()
+    }
+
+
+def test_conferir_banco_nunca_migrado(banco: psycopg.Connection[TupleRow]) -> None:
+    with pytest.raises(ErroMigracao, match="nenhuma migração aplicada"):
+        conferir(banco, VALIDAS)
+    assert _tabelas(banco) == set()
+
+
+def test_conferir_recusa_alterada_e_desconhecida(
+    banco: psycopg.Connection[TupleRow], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    aplicar(banco, VALIDAS)
+    with pytest.raises(ErroMigracao, match=r"não conhece: \[2\]"):
+        conferir(banco, SO_A_PRIMEIRA)
+    alterada = [Migracao(m.versao, m.nome, m.sql + "\n-- mexi") for m in disponiveis(VALIDAS)]
+    monkeypatch.setattr(migracoes, "disponiveis", lambda pacote: alterada)
+    with pytest.raises(ErroMigracao, match=r"alteradas: \[1, 2\]"):
+        conferir(banco, VALIDAS)

@@ -6,21 +6,24 @@ repositórios deles (tabela no `README.md`). Comece por `docs/PENDENCIAS.md` e
 `docs/adr/README.md`.
 
 > Os papéis abaixo seguem a PLAT-0016, aceita em 12/11/2026 (substitui a PLAT-0015). As
-> PLAT-0017 a 0022 foram aceitas no mesmo dia. Os utilitários de fatos (PLAT-0019) e a base da
-> interface web (PLAT-0021) entram no pacote numa etapa seguinte, cada um com o seu PR.
+> PLAT-0017 a 0022 foram aceitas no mesmo dia. A versão 0.2.0 do pacote trouxe o arquivo
+> imutável (PLAT-0022), os utilitários de fatos (PLAT-0019) e a base da interface web
+> (PLAT-0021).
 
 ## O que entra aqui
 
 - ADRs `PLAT-` (decisão que vale para mais de um módulo), no modelo `docs/adr/0000-modelo.md`.
 - O resumo `docs/PLATAFORMA.md`, atualizado no mesmo PR que muda uma ADR `PLAT-`.
-- O índice de contratos `docs/contratos/README.md` (os schemas ficam com quem publica).
+- O índice de contratos `docs/contratos/README.md` (os schemas ficam com quem publica) e o
+  contrato web entre módulos, portal e Caddy (`docs/contratos/web.md`).
 - Pendências da plataforma em `docs/PENDENCIAS.md`.
 - O pacote `blatt-plataforma`: `blatt.comum`, `blatt.infra`, utilitários de fatos
   (`outbox`/`inbox`) e a base comum da interface web. Só código sem regra de negócio, usado por
   mais de um módulo, com testes próprios; não importa nenhum módulo. Fica em `src/blatt/`
   (`blatt` sem `__init__.py`, *namespace package*), com `pyproject.toml` na raiz e testes em
-  `tests/`; explicação em `src/blatt/README.md`. Hoje (0.1.0) tem só `blatt.comum` e
-  `blatt.infra`.
+  `tests/`; explicação e API em `src/blatt/README.md`. Hoje (0.2.0): `blatt.comum`,
+  `blatt.infra` (configuração, arquivo imutável, migrações, `fatos`) e `blatt.web` (no extra
+  opcional `[web]`). Dependência nova vai para um extra se nem todo módulo a usa.
 
 ## O que não entra
 
@@ -41,7 +44,7 @@ repositórios deles (tabela no `README.md`). Comece por `docs/PENDENCIAS.md` e
 - Mudança no código comum: mudar o pacote por PR e subir a versão no `pyproject.toml`; depois
   do merge, a tag `vX.Y.Z` é marcada em `main` pelo Marcello; cada módulo sobe a versão por PR.
 - Antes de cada commit:
-  `uv sync && uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run lint-imports && BLATT_EXIGIR_POSTGRES=1 uv run pytest`.
+  `uv sync --all-extras && uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run lint-imports && BLATT_EXIGIR_POSTGRES=1 uv run pytest`.
 - Uma ADR `PLAT-` que afete um módulo é acompanhada de pendência ou PR no repositório dele.
 
 ## Trabalhando com os módulos
