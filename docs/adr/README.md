@@ -33,8 +33,8 @@ formam, com as anteriores que não foram substituídas, o conjunto que vale:
 | Interface web | [PLAT-0021](PLAT-0021-interface-web.md) |
 | Backup | [PLAT-0022](PLAT-0022-backup-arquivo-imutavel-e-dossies.md) |
 
-As PLAT-0005, 0006, 0009, 0014 e 0015 estão substituídas e valem só como histórico. A
-PLAT-0010 continua valendo na parte só da folha até existir a FOLHA-0016 (pendência A-14). A
+As PLAT-0005, 0006, 0009, 0010, 0014 e 0015 estão substituídas e valem só como histórico (a
+parte só da folha da PLAT-0010 está na FOLHA-0016 do `blatt`, aceita em 13/11/2026). A
 PLAT-0019 trocou o orquestrador da PLAT-0014 pelo entregador. As PLAT-0001 a 0004 seguem em
 status Proposta, embora o código as siga (pendência A-06).
 
@@ -50,7 +50,7 @@ status Proposta, embora o código as siga (pendência A-06).
 | [PLAT-0006](PLAT-0006-infraestrutura-aberta.md) | Infraestrutura aberta | Substituída pela PLAT-0020 (aceita em 12/11/2026) |
 | [PLAT-0008](PLAT-0008-driver-postgresql-psycopg.md) | Driver do PostgreSQL: psycopg (exceção LGPL) | Aceita |
 | [PLAT-0009](PLAT-0009-persistencia-postgresql.md) | Persistência em PostgreSQL: SQL explícito, migrações e tenant | Substituída pela PLAT-0017 e, no item 8, pela PLAT-0016 (aceitas em 12/11/2026) |
-| [PLAT-0010](PLAT-0010-vinculos-e-dados-pessoais.md) | Vínculos e dados pessoais no banco, com histórico por data | Aceita; regra comum substituída pela PLAT-0018 (aceita em 12/11/2026); parte da folha a virar FOLHA-0016 |
+| [PLAT-0010](PLAT-0010-vinculos-e-dados-pessoais.md) | Vínculos e dados pessoais no banco, com histórico por data | Substituída pela PLAT-0018 (regra comum, aceita em 12/11/2026) e pela FOLHA-0016 do `blatt` (parte da folha, aceita em 13/11/2026) |
 | [PLAT-0014](PLAT-0014-banco-por-modulo-e-orquestrador.md) | Um banco por módulo e integração por orquestrador; dados pessoais dos trabalhadores só na folha, empresa e sócios no cadastro | Aceita (03/11/2026, P-57 da folha); substituída pelas PLAT-0017, 0018 e 0019 (aceitas em 12/11/2026) |
 | [PLAT-0015](PLAT-0015-governanca-no-assembleia.md) | Decisões de plataforma num repositório próprio, o `assembleia` | Substituída pela PLAT-0016 (aceita em 12/11/2026) |
 | [PLAT-0016](PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) | Mapa de módulos, papel de cada repositório e código comum como pacote | Aceita (12/11/2026) |
