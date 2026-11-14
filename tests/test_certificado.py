@@ -501,3 +501,25 @@ def test_tls_recusa_servidor_fora_da_cadeia(ficticio: Ficticio, tmp_path: Path) 
         ):
             contexto.wrap_socket(bruto, server_hostname="localhost")
     assert vistos == []
+
+
+@so_linux
+def test_selo_nao_depende_dos_nomes_do_python(
+    ficticio: Ficticio, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Python compilado com cabeçalhos antigos pode não trazer ``F_ADD_SEALS``, ``F_SEAL_*`` e
+    ``MFD_ALLOW_SEALING``; o selo usa então os valores do kernel, em vez de ser pulado."""
+    import fcntl
+
+    for nome in ("F_ADD_SEALS", "F_SEAL_SEAL", "F_SEAL_SHRINK", "F_SEAL_GROW", "F_SEAL_WRITE"):
+        monkeypatch.delattr(fcntl, nome, raising=False)
+    monkeypatch.delattr(os, "MFD_ALLOW_SEALING", raising=False)
+    monkeypatch.delattr(os, "MFD_CLOEXEC", raising=False)
+    credencial = abrir_pkcs12(ficticio.pfx, SENHA, agora=AGORA)
+    with pem_em_memoria(credencial) as pem:
+        escrita = os.open(pem.chave, os.O_WRONLY)
+        try:
+            with pytest.raises(PermissionError):
+                os.write(escrita, b"x")
+        finally:
+            os.close(escrita)

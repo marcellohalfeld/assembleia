@@ -178,11 +178,20 @@ class PemEmMemoria:
         return f"PemEmMemoria({self.certificado!r}, {self.chave!r}, senha oculta)"
 
 
+# Valores da interface do Linux com o programa (estáveis; ``include/uapi/linux/fcntl.h`` e
+# ``include/uapi/linux/memfd.h`` do kernel; ``fcntl(2)`` e ``memfd_create(2)``). Servem quando o
+# Python foi compilado com cabeçalhos antigos e não traz os nomes em ``fcntl`` e ``os``: sem
+# eles, o selo seria pulado em silêncio.
+_F_ADD_SEALS = 1033  # F_LINUX_SPECIFIC_BASE (1024) + 9
+_SELOS = {"F_SEAL_SEAL": 0x1, "F_SEAL_SHRINK": 0x2, "F_SEAL_GROW": 0x4, "F_SEAL_WRITE": 0x8}
+_MFD_CLOEXEC = 0x1
+_MFD_ALLOW_SEALING = 0x2
+
+
 def _selos() -> int:
-    nomes = ("F_SEAL_SEAL", "F_SEAL_SHRINK", "F_SEAL_GROW", "F_SEAL_WRITE")
     selos = 0
-    for nome in nomes:
-        selos |= getattr(fcntl, nome, 0)
+    for nome, valor in _SELOS.items():
+        selos |= getattr(fcntl, nome, valor)
     return selos
 
 
@@ -195,8 +204,9 @@ def _arquivo_anonimo(nome: str, conteudo: bytes) -> int:
             "este sistema não tem os.memfd_create (só Linux); o certificado não vai para "
             "arquivo temporário"
         )
-    selar = hasattr(fcntl, "F_ADD_SEALS") and hasattr(os, "MFD_ALLOW_SEALING")
-    opcoes = os.MFD_CLOEXEC | (os.MFD_ALLOW_SEALING if selar else 0)
+    opcoes = getattr(os, "MFD_CLOEXEC", _MFD_CLOEXEC) | getattr(
+        os, "MFD_ALLOW_SEALING", _MFD_ALLOW_SEALING
+    )
     try:
         descritor: int = criar(nome, opcoes)
     except OSError as erro:
@@ -209,8 +219,13 @@ def _arquivo_anonimo(nome: str, conteudo: bytes) -> int:
         escrito = 0
         while escrito < len(vista):
             escrito += os.write(descritor, vista[escrito:])
-        if selar:
-            fcntl.fcntl(descritor, fcntl.F_ADD_SEALS, _selos())
+        try:
+            fcntl.fcntl(descritor, getattr(fcntl, "F_ADD_SEALS", _F_ADD_SEALS), _selos())
+        except OSError as erro:
+            raise ErroSemMemoriaAnonima(
+                f"o sistema recusou selar o arquivo anônimo ({erro.strerror}); o certificado "
+                "não vai para arquivo temporário"
+            ) from None
         caminho = f"/proc/self/fd/{descritor}"
         try:
             os.stat(caminho)
