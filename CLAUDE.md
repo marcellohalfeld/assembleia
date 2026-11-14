@@ -8,7 +8,7 @@ repositórios deles (tabela no `README.md`). Comece por `docs/PENDENCIAS.md` e
 > Os papéis abaixo seguem a PLAT-0016, aceita em 12/11/2026 (substitui a PLAT-0015). As
 > PLAT-0017 a 0022 foram aceitas no mesmo dia. A versão 0.2.0 do pacote trouxe o arquivo
 > imutável (PLAT-0022), os utilitários de fatos (PLAT-0019) e a base da interface web
-> (PLAT-0021).
+> (PLAT-0021); a 0.3.0, o certificado A1 em memória (PLAT-0020, item 5).
 
 ## O que entra aqui
 
@@ -21,9 +21,10 @@ repositórios deles (tabela no `README.md`). Comece por `docs/PENDENCIAS.md` e
   (`outbox`/`inbox`) e a base comum da interface web. Só código sem regra de negócio, usado por
   mais de um módulo, com testes próprios; não importa nenhum módulo. Fica em `src/blatt/`
   (`blatt` sem `__init__.py`, *namespace package*), com `pyproject.toml` na raiz e testes em
-  `tests/`; explicação e API em `src/blatt/README.md`. Hoje (0.2.0): `blatt.comum`,
-  `blatt.infra` (configuração, arquivo imutável, migrações, `fatos`) e `blatt.web` (no extra
-  opcional `[web]`). Dependência nova vai para um extra se nem todo módulo a usa.
+  `tests/`; explicação e API em `src/blatt/README.md`. Hoje (0.3.0): `blatt.comum`,
+  `blatt.infra` (configuração, arquivo imutável, migrações, `fatos` e `certificado`, este no
+  extra opcional `[certificado]`) e `blatt.web` (no extra opcional `[web]`). Dependência nova
+  vai para um extra se nem todo módulo a usa.
 
 ## O que não entra
 

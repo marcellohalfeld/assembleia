@@ -43,7 +43,7 @@ segue a decisão dele, registrada com a fonte.
 | Arquitetura | Hexagonal: `dominio` ← `aplicacao` ← `adaptadores`, verificada pelo `import-linter`; domínio sem I/O | [PLAT-0002](adr/PLAT-0002-arquitetura-hexagonal.md) |
 | Parâmetros legais | Fora do código, em JSON com JSON Schema, vigência real, base legal, fonte, conferência e manifesto SHA-256; números como texto decimal; resolução pelo período de referência de cada tributo (competência; mês de pagamento para IRRF), nunca pela data de hoje; fórmulas em código revisado | [PLAT-0003](adr/PLAT-0003-contrato-dos-parametros-externos.md) |
 | Instância e tenant | Uma instância por escritório; `tenant_id` em toda tabela de negócio, lido num único ponto | [PLAT-0004](adr/PLAT-0004-instancia-por-escritorio.md) |
-| Código comum | Pacote `blatt-plataforma` (0.2.0: `blatt.comum`; `blatt.infra` com configuração, arquivo imutável, migrações e fatos; `blatt.web` no extra `[web]`), instalado por tag do git do `assembleia`; `blatt` como *namespace package*; sem regra de negócio. Instalação, API e versões: [`src/blatt/README.md`](../src/blatt/README.md) | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) |
+| Código comum | Pacote `blatt-plataforma` (0.3.0: `blatt.comum`; `blatt.infra` com configuração, arquivo imutável, migrações, fatos e o certificado A1 em memória, este no extra `[certificado]`; `blatt.web` no extra `[web]`), instalado por tag do git do `assembleia`; `blatt` como *namespace package*; sem regra de negócio. Instalação, API e versões: [`src/blatt/README.md`](../src/blatt/README.md) | [PLAT-0016](adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md) |
 | Persistência | PostgreSQL, um banco e um usuário por módulo; SQL explícito; migrações por módulo (transação, *advisory lock*, SHA-256, só avança); FKs compostas com `tenant_id`; transação de quem chama; `numeric(15,2)`/`Decimal`; testes contra PostgreSQL real. Exceção datada: a folha, num banco com schemas `cadastro` e `folha`, até a etapa do cadastro | [PLAT-0017](adr/PLAT-0017-persistencia-postgresql.md) |
 | Dono de cada dado | Histórico por data de vigência, só acrescentado. Dado pessoal fica só no módulo que o usa e não vai nos fatos; dados pessoais dos trabalhadores só na folha; empresa e quadro societário num cadastro geral | [PLAT-0018](adr/PLAT-0018-dono-de-cada-dado-e-cadastro.md) |
 | Integração | Fatos no passado, `outbox` na mesma transação do dado, `inbox` idempotente; envelope comum; JSON Schema versionado por quem publica; nenhum módulo lê tabela de negócio de outro; entregador sem regra de negócio e sem banco próprio, com cursor no destino | [PLAT-0019](adr/PLAT-0019-integracao-por-fatos-e-entregador.md) |
@@ -182,7 +182,9 @@ uv sync && uv run ruff check . && uv run ruff format --check . \
   imagem ou log. Casos com dados reais são anonimizados antes do commit.
 - O certificado A1 real **nunca passa pela sessão do Claude Code**; os testes usam certificados
   gerados na hora. Na instância, o A1 vem pelo formulário e fica só em memória (PLAT-0020,
-  item 5); guarda para coleta agendada em aberto (A-10).
+  item 5): `blatt.web.formulario` lê o upload e `blatt.infra.certificado` o abre, assina com a
+  chave em memória e monta o TLS mútuo por `memfd_create`, sem arquivo temporário; guarda para
+  coleta agendada em aberto (A-10).
 - Webservices do governo: travas de cada módulo (só ambiente de testes até ADR que libere
   produção, verificação TLS sempre ligada, envio com confirmação).
 - Acesso à instância só pela rede local, por HTTPS, com login no portal (PLAT-0020, PLAT-0021).
@@ -193,7 +195,7 @@ Ver [PENDENCIAS](PENDENCIAS.md): aceite das PLAT-0001 a 0004 (A-06),
 desenho do cadastro (A-09), guarda do A1 para coleta agendada (A-10), prazos legais de guarda
 (A-12), licenças do software de sistema nas imagens (A-13), `mes_do_evento`
 (A-15), branch padrão do aspirador (A-16), levar a reorganização aos módulos e adotar a 0.2.0
-(A-17), wiki normativa (A-21).
+(A-17), wiki normativa (A-21), tag `v0.3.0` e adoção do certificado em memória (A-22).
 
 ## 10. Implementação de referência
 

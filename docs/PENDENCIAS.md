@@ -171,6 +171,48 @@ O que cada repositório faz para **adotar a 0.2.0** (tag marcada em 13/11/2026; 
 - **Decisão aberta:** se a parte normativa pode ser publicada fora da instância (D5 do plano).
 - **Bloqueia:** nada; é entrega nova, a priorizar pelo Marcello.
 
+### A-22. Tag `v0.3.0` (certificado A1 em memória) e adoção pela folha e pelo aspirador
+
+- **Contexto (14/11/2026):** a versão 0.3.0 do pacote traz `blatt.infra.certificado`, no extra
+  `[certificado]` (`cryptography`): `abrir_pkcs12` (abre o `.pfx` em memória, confere forma,
+  tamanho e validade, sem regra de negócio), `contexto_tls_cliente` (TLS mútuo pelo `ssl` da
+  biblioteca padrão, carregado por `os.memfd_create` em `/proc/self/fd/N`) e `pem_em_memoria`.
+  Generaliza o `contexto_tls` do aspirador (P-42, ASP-0009 de lá) e serve à fase 3 da web da
+  folha (assinar e enviar ao eSocial com o `.pfx` do formulário). API em
+  [`src/blatt/README.md`](../src/blatt/README.md).
+- **Depois do merge:** o Marcello marca a tag `v0.3.0` no commit de `main` (`git tag v0.3.0` e
+  `git push origin v0.3.0`).
+- **Depois da tag, por PR de cada repositório, no ritmo de cada um:**
+  - **folha:** subir para `"blatt-plataforma[web,certificado] @ ...@v0.3.0"`; no
+    `TransporteHttps` (`adaptadores/esocial/webservice.py`), trocar
+    `_carregar_certificado_cliente`, que hoje grava a chave cifrada num diretório temporário
+    mesmo no Linux, por `contexto_tls_cliente(credencial, cafile=cadeia_servidor)` (o `cafile`
+    mantém a FOLHA-0013: só a cadeia conferida, sem as raízes do sistema); a assinatura continua
+    na folha, com `credencial.chave` e `credencial.certificado` (a exigência de chave RSA fica
+    no módulo);
+  - **aspirador:** subir para `[web,certificado]@v0.3.0` e trocar `Credencial.de_pkcs12` e
+    `contexto_tls` (`adaptadores/adn.py`) pelo pacote, mantendo no módulo `conferir_raiz` e
+    `cnpj_do_certificado`.
+- **Para o Marcello decidir:**
+  - (a) **linha de comando no macOS.** O pacote não tem plano B: sem `memfd_create`, levanta
+    `ErroSemMemoriaAnonima` e não grava arquivo temporário (é o que a PLAT-0020, item 5.1, pede
+    na instância). O aspirador, no Mac, hoje cai num diretório 0700 com a chave cifrada por
+    senha aleatória, apagado em seguida (P-42 de lá), e a folha faz o mesmo em qualquer sistema.
+    **Proposta:** o pacote fica sem plano B; quem precisar rodar a linha de comando no Mac
+    mantém o diretório temporário no adaptador de linha de comando do próprio módulo, fora da
+    instância, registrado na ADR dele (ASP-0009, item 4; na folha, uma `FOLHA-`). Não exige
+    mudar a PLAT-0020 nem a PLAT-0021: na instância (Linux, container) nada vai para disco;
+  - (b) **validade:** `abrir_pkcs12` recusa certificado vencido ou ainda não válido pelo relógio
+    do servidor (`agora` pode ser informado). A folha e o aspirador hoje não conferem; com a
+    adoção, um A1 vencido passa a ser recusado antes da conexão, e não pelo servidor do governo.
+    **Proposta:** aceitar assim;
+  - (c) **`cnpj_do_certificado`** (leitura do `otherName` 2.16.76.1.3.3, DOC-ICP-04, a
+    conferir) está igual na folha e no aspirador. É leitura do formato ICP-Brasil, não regra
+    de negócio de um módulo. **Proposta:** levar ao pacote numa versão seguinte, ao lado de
+    `abrir_pkcs12`, deixando a comparação com o CNPJ consultado (raiz, transmissor) em cada
+    módulo.
+- **Bloqueia:** a adoção da 0.3.0 pelos módulos e a fase 3 da web da folha.
+
 ## Resolvidas
 
 | Data | Decisão | Registro |
