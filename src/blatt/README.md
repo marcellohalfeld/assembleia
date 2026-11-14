@@ -4,12 +4,12 @@ Código comum da plataforma Blatt, sem regra de negócio, usado por mais de um m
 ([PLAT-0016](../../docs/adr/PLAT-0016-mapa-de-modulos-e-papeis-dos-repositorios.md), item 4).
 Os módulos instalam este pacote pelo git; não copiam `blatt.comum` nem `blatt.infra`.
 
-## O que tem (versão 0.2.0)
+## O que tem (versão 0.3.0)
 
 | Pacote | Conteúdo |
 | --- | --- |
 | `blatt.comum` | `AnoMes` (`periodo.py`); validação de CPF e CNPJ, inclusive alfanumérico (`documentos.py`); regras de texto do eSocial (`texto.py`). Só biblioteca padrão; não importa `blatt.infra` nem `blatt.web`. |
-| `blatt.infra` | Configuração, arquivo imutável, migrações e fatos, usados só pelos adaptadores dos módulos (detalhe abaixo). Não importa `blatt.web`. |
+| `blatt.infra` | Configuração, arquivo imutável, migrações, fatos e, desde a 0.3.0, o certificado A1 em memória (no extra `[certificado]`), usados só pelos adaptadores dos módulos (detalhe abaixo). Não importa `blatt.web`. |
 | `blatt.web` | Base da interface web (PLAT-0021), no extra `[web]`: fábrica de aplicação, modelo base, estilo, htmx, identidade, CSRF, upload sensível em memória, formatos de apresentação. Contrato com o portal e o Caddy: [`docs/contratos/web.md`](../../docs/contratos/web.md). |
 
 Nenhum deles tem regra de negócio de módulo, nem importa módulo de negócio (`import-linter` e
@@ -48,6 +48,50 @@ Nenhum deles tem regra de negócio de módulo, nem importa módulo de negócio (
   - `entrega`: `entregar(origem, destino, Inscricao.de(origem, tipos)) -> ResultadoEntrega`,
     `ErroOrigemRestaurada`. Técnica contra fato confirmado fora de ordem (PLAT-0019, item 7) e
     alternativas: docstring de `entrega.py`.
+- **`certificado`** (PLAT-0020, item 5), desde a 0.3.0, no extra `[certificado]`
+  (`cryptography`). Sem regra de negócio: CNPJ, raiz do CNPJ, e-CNPJ × e-CPF, cadeia ICP-Brasil
+  e revogação ficam com o módulo.
+  - `abrir_pkcs12(conteudo: bytes, senha: str | bytes, *, agora: datetime | None = None,
+    tamanho_maximo: int = TAMANHO_MAXIMO_PFX) -> CredencialA1`: abre o `.pfx`/`.p12` em
+    memória; recusa vazio, acima de `TAMANHO_MAXIMO_PFX` (64 KiB, o mesmo do formulário),
+    senha errada ou arquivo que não é PKCS#12 (uma só mensagem: o `cryptography` não
+    distingue os dois), sem chave ou sem certificado, chave que não é RSA nem EC, chave que
+    não é a do certificado, e fora da validade (`agora`, com fuso; padrão: o relógio, em UTC).
+    Senha vazia abre `.pfx` sem senha;
+  - `CredencialA1(chave, certificado, cadeia)` (frozen): objetos do `cryptography`, prontos
+    para assinar; `inicio_validade`, `fim_validade`, `certificado_pem(*, com_cadeia=False)`;
+    o `repr` mostra só a validade;
+  - `pem_em_memoria(credencial, *, com_cadeia=False, cifrar_chave=True)`: gerenciador de
+    contexto que entrega `PemEmMemoria(certificado, chave, senha_chave)`, caminhos
+    `/proc/self/fd/N` de arquivos anônimos (`os.memfd_create`, `MFD_CLOEXEC`, selados contra
+    escrita) com o certificado e a chave PKCS#8 cifrada por uma senha aleatória de 32 bytes;
+    fecha tudo na saída, com ou sem erro. Para bibliotecas que só aceitam caminho;
+  - `contexto_tls_cliente(credencial, *, cafile=None, versao_minima=TLSVersion.TLSv1_2,
+    com_cadeia=False) -> ssl.SSLContext`: TLS mútuo pelo `ssl` da biblioteca padrão, com
+    `create_default_context` (verificação do servidor sempre ligada; com `cafile`, só essas
+    raízes); os arquivos anônimos fecham logo depois do `load_cert_chain`;
+  - erros: `ErroCertificado` (`ValueError`), `ErroCertificadoForaDaValidade` (subclasse) e
+    `ErroSemMemoriaAnonima` (`RuntimeError`). **Fora do Linux** (macOS, Windows), com
+    `memfd_create` bloqueado ou sem `/proc`, `pem_em_memoria` e `contexto_tls_cliente`
+    levantam `ErroSemMemoriaAnonima` e **não** caem em arquivo temporário; `abrir_pkcs12` e a
+    assinatura com `credencial.chave` funcionam em qualquer sistema. Nada é registrado em
+    log; mensagens e `repr` nunca trazem conteúdo nem senha. Por que `memfd_create` e o que
+    não se garante (memória do Python, `/proc/<pid>/fd` para quem pode fazer `ptrace`):
+    docstring de `certificado.py`.
+
+  Uso num adaptador web, com o formulário da `blatt.web` (extras `[web,certificado]`):
+
+  ```python
+  # certificado: o CertificadoA1 de blatt.web.formulario
+  credencial = abrir_pkcs12(certificado.conteudo, certificado.senha)
+  assinar(evento, credencial.chave, credencial.certificado)  # XMLDSig do módulo
+  contexto = contexto_tls_cliente(credencial, cafile=cadeia_servidor)
+  conexao = http.client.HTTPSConnection(host, context=contexto)
+  ```
+
+  `ErroCertificado` vira resposta 400 na rota do módulo; a mensagem pode ir para a página.
+  Generaliza o `contexto_tls` do aspirador (`adaptadores/adn.py`, P-42 e ASP-0009 de lá), que
+  o aspirador e a folha podem adotar no lugar das suas implementações (A-22).
 
 ### `blatt.web` (extra `[web]`)
 
@@ -57,7 +101,8 @@ Nenhum deles tem regra de negócio de módulo, nem importa módulo de negócio (
 - `seguranca`: `Identidade`, `LimiteECsrf`, `CabecalhosSeguranca` (aplicados pela
   `criar_app`), `usuario_do_escopo(scope)`;
 - `formulario.formulario_certificado(...)` → dependência que entrega `CertificadoA1(conteudo,
-  senha, nome_arquivo, campos)` só em memória;
+  senha, nome_arquivo, campos)` só em memória; para abrir e usar o `.pfx`,
+  `blatt.infra.certificado` (extra `[certificado]`);
 - `apresentacao`: `moeda`, `numero`, `data`, `data_hora`, `competencia`, `cnpj`, `cpf`,
   `cpf_oculto` (também filtros nos modelos). Só biblioteca padrão: funciona sem o extra;
 - `estatico/`: `blatt.css` e `htmx.min.js` 2.0.11 (origem, integridade e SHA-256 em
@@ -73,13 +118,21 @@ Nenhum deles tem regra de negócio de módulo, nem importa módulo de negócio (
   migrações passou a ser **obrigatório** em `disponiveis()` e `aplicar()`, e `PACOTE_PADRAO`
   deixou de existir. Cada módulo guarda as suas migrações (`sql/NNNN_nome.sql`) no próprio
   pacote e informa o nome dele, por exemplo
-  `aplicar(conexao, "blatt.fiscal.aspirador.adaptadores.postgres")`. A 0.2.0 só acrescenta.
+  `aplicar(conexao, "blatt.fiscal.aspirador.adaptadores.postgres")`. A 0.2.0 e a 0.3.0 só acrescentam.
+- **Origem do `certificado` (0.3.0):** o `contexto_tls` e a `Credencial` do aspirador
+  (`src/blatt/fiscal/aspirador/adaptadores/adn.py`), sem a conferência do CNPJ (regra do
+  módulo) e sem o plano B em diretório temporário; com selo contra escrita, conferência da
+  validade e de que a chave é a do certificado.
 - **Dependências:** `psycopg[binary]` (LGPL, com a exceção nominal da
   [PLAT-0008](../../docs/adr/PLAT-0008-driver-postgresql-psycopg.md)). No extra `[web]`, conferidas
   no PyPI em 13/11/2026: FastAPI 0.162.5 (MIT), Starlette 1.10.0 (BSD-3-Clause), Jinja2 3.1.6
   (BSD), Uvicorn 0.54.0 (BSD-3-Clause), python-multipart 0.0.33 (Apache-2.0); as transitivas
   (pydantic, anyio, opentelemetry-api e outras) passam pelo `pip-licenses` do CI. htmx 2.0.11,
-  0BSD (A-13), versionado como arquivo. Desenvolvimento: httpx 0.28.1 (BSD-3-Clause), para o
+  0BSD (A-13), versionado como arquivo. No extra `[certificado]`, conferidas em 14/11/2026:
+  cryptography 50.0.2 (Apache-2.0 OR BSD-3-Clause, `license_expression` no PyPI e
+  [`LICENSE`](https://github.com/pyca/cryptography/blob/50.0.2/LICENSE) do código-fonte), cffi
+  2.1.1 (MIT-0, PyPI) e pycparser 3.12 (BSD-3-Clause, PyPI); a roda do cryptography traz o
+  OpenSSL embutido (Apache-2.0, a conferir na roda). Desenvolvimento: httpx 0.28.1 (BSD-3-Clause), para o
   cliente de teste.
 
 ## `blatt` é *namespace package*
@@ -91,22 +144,27 @@ os demais, do repositório de cada módulo. Cada subpacote leva o seu `py.typed`
 ## Como um módulo instala
 
 O `pyproject.toml` do pacote fica na raiz deste repositório, então a dependência não precisa
-de `#subdirectory=`. No repositório do módulo:
+de `#subdirectory=`. No repositório do módulo (a tag `v0.3.0` só existe depois do merge e da
+marcação pelo Marcello, A-22; até lá, `v0.2.0`, sem o `certificado`):
 
 ```bash
-uv add "blatt-plataforma @ git+https://github.com/marcellohalfeld/assembleia@v0.2.0"
+uv add "blatt-plataforma @ git+https://github.com/marcellohalfeld/assembleia@v0.3.0"
 ```
 
 O `uv` grava `"blatt-plataforma"` em `dependencies` e a origem em `[tool.uv.sources]`
-(`blatt-plataforma = { git = "https://github.com/marcellohalfeld/assembleia", rev = "v0.2.0" }`);
+(`blatt-plataforma = { git = "https://github.com/marcellohalfeld/assembleia", rev = "v0.3.0" }`);
 o `uv.lock` fixa o commit. Com
-`uv add git+https://github.com/marcellohalfeld/assembleia --tag v0.2.0`, a origem fica
-`tag = "v0.2.0"`, mais explícita; o efeito é o mesmo.
+`uv add git+https://github.com/marcellohalfeld/assembleia --tag v0.3.0`, a origem fica
+`tag = "v0.3.0"`, mais explícita; o efeito é o mesmo.
 
 Módulo com adaptador web: pedir o extra, `uv add "blatt-plataforma[web] @
-git+https://github.com/marcellohalfeld/assembleia@v0.2.0"` (no `pyproject.toml`,
+git+https://github.com/marcellohalfeld/assembleia@v0.3.0"` (no `pyproject.toml`,
 `"blatt-plataforma[web]"` em `dependencies`; a origem em `[tool.uv.sources]` é a mesma).
-Conferido com o wheel da 0.2.0 num ambiente isolado: sem o extra, `blatt.web.apresentacao` e
+Módulo que lê o A1: pedir também o extra `[certificado]`
+(`"blatt-plataforma[web,certificado]"`). Conferido com o wheel da 0.3.0 num ambiente isolado:
+sem o extra, `blatt.infra.fatos` e `blatt.infra.arquivo` funcionam e `blatt.infra.certificado`
+falha por falta do `cryptography`; com ele, importa. Conferido com o wheel da 0.2.0 num
+ambiente isolado: sem o extra, `blatt.web.apresentacao` e
 `blatt.infra.fatos` funcionam e `blatt.web.app` falha por falta do FastAPI; com o extra, o
 Uvicorn serve a aplicação. (Conferido com o uv 0.11 contra um
 clone local, com branch no lugar da tag: `@<ref>` grava `rev`, `--branch` grava `branch`.)
@@ -136,7 +194,7 @@ funcionando.
 2. Subir `version` no `pyproject.toml` (mudança incompatível é versão maior nova) e rodar
    `uv lock`.
 3. Depois do merge, marcar a tag `vX.Y.Z` no commit de `main` e enviá-la (`git tag vX.Y.Z` e
-   `git push origin vX.Y.Z`). Tags são marcadas pelo Marcello (a da 0.2.0 é a pendência A-19).
+   `git push origin vX.Y.Z`). Tags são marcadas pelo Marcello.
 4. Em cada módulo, por PR, no ritmo dele: trocar a tag em `[tool.uv.sources]` (ou repetir o
    `uv add` com a tag nova), rodar `uv lock --upgrade-package blatt-plataforma` e as checagens.
 
@@ -152,7 +210,8 @@ migrações fictícias (`tests/migracoes_teste/`); os de fatos criam dois bancos
 destino) e o papel `blatt_entregador` com as concessões da PLAT-0019, item 9. Os da web usam o
 módulo fictício `tests/web_exemplo`. O `import-linter` verifica que nenhum subpacote importa
 módulo de negócio, que `blatt.comum` não importa `blatt.infra` nem `blatt.web`, que
-`blatt.infra` não importa `blatt.web` nem a pilha web e que `blatt.web.apresentacao` funciona
-sem o extra; a explicação do primeiro contrato está no `pyproject.toml`. O CI repete a
+`blatt.infra` não importa `blatt.web` nem a pilha web, que `blatt.web.apresentacao` funciona
+sem o extra `[web]` e que, em `blatt.infra`, só `certificado` usa o `cryptography`; os testes do
+certificado geram A1 fictício na hora e sobem um servidor TLS local; a explicação do primeiro contrato está no `pyproject.toml`. O CI repete a
 sequência com os extras, confere as licenças com `pip-licenses` e verifica o conteúdo do wheel
 (sem `blatt/__init__.py`, com os `py.typed`, os estáticos e os modelos).

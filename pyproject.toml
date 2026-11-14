@@ -1,7 +1,7 @@
 [project]
 name = "blatt-plataforma"
-version = "0.2.0"
-description = "Código comum da plataforma Blatt, sem regra de negócio: blatt.comum, blatt.infra (configuração, arquivo imutável, migrações, fatos) e blatt.web (PLAT-0016)"
+version = "0.3.0"
+description = "Código comum da plataforma Blatt, sem regra de negócio: blatt.comum, blatt.infra (configuração, arquivo imutável, migrações, fatos, certificado A1 em memória) e blatt.web (PLAT-0016)"
 readme = "src/blatt/README.md"
 requires-python = ">=3.12"
 authors = [{ name = "Marcello Halfeld" }]
@@ -21,6 +21,15 @@ web = [
     "jinja2>=3.1.6",
     "uvicorn>=0.54.0",
     "python-multipart>=0.0.33",
+]
+# Certificado A1 em memória (blatt.infra.certificado, PLAT-0020, item 5). cryptography 50.0.2:
+# Apache-2.0 OR BSD-3-Clause (license_expression no PyPI e LICENSE do código-fonte,
+# https://github.com/pyca/cryptography/blob/50.0.2/LICENSE, conferidos em 14/11/2026); a
+# dependência cffi 2.1.1 é MIT-0 e a pycparser 3.12, BSD-3-Clause (PyPI, 14/11/2026). Mínimo
+# 43, como a folha e o aspirador já pedem. Só quem lê o A1 instala:
+# "blatt-plataforma[certificado]".
+certificado = [
+    "cryptography>=43",
 ]
 
 [dependency-groups]
@@ -114,3 +123,12 @@ name = "blatt.web.apresentacao funciona sem o extra web"
 type = "forbidden"
 source_modules = ["blatt.web.apresentacao"]
 forbidden_modules = ["fastapi", "starlette", "jinja2", "markupsafe", "uvicorn", "python_multipart"]
+
+[[tool.importlinter.contracts]]
+name = "blatt.infra, fora de blatt.infra.certificado, funciona sem o extra certificado"
+type = "forbidden"
+source_modules = [
+    "blatt.infra.configuracao", "blatt.infra.arquivo", "blatt.infra.postgres",
+    "blatt.infra.postgres.**", "blatt.infra.fatos", "blatt.infra.fatos.**",
+]
+forbidden_modules = ["cryptography"]

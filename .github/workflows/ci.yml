@@ -40,6 +40,7 @@ jobs:
           fi
           python3 -m zipfile -l dist/*.whl | grep -q '^blatt/comum/py.typed'
           python3 -m zipfile -l dist/*.whl | grep -q '^blatt/infra/py.typed'
+          python3 -m zipfile -l dist/*.whl | grep -q '^blatt/infra/certificado.py'
           python3 -m zipfile -l dist/*.whl | grep -q '^blatt/web/py.typed'
           python3 -m zipfile -l dist/*.whl | grep -q '^blatt/web/estatico/htmx.min.js'
           python3 -m zipfile -l dist/*.whl | grep -q '^blatt/web/estatico/blatt.css'

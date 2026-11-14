@@ -59,15 +59,6 @@ repositório dele.
   aviso de licenças na distribuição, como a PLAT-0008 já faz para o psycopg).
 - **Bloqueia:** nada no código; esclarece a política de licenças para as imagens da PLAT-0020.
 
-### A-14. FOLHA-0016: modelo de vínculo e contrato da folha
-
-- **Contexto:** a parte da PLAT-0010 que é só da folha (vínculo, contrato, afastamento,
-  formato `jsonb`, recibo do eSocial, seção "Implementação") não foi substituída pela
-  PLAT-0018 e continua valendo na PLAT-0010.
-- **Proposta:** uma sessão do `blatt` escreve a FOLHA-0016 com esse conteúdo, sem mudar o
-  sentido, e a PLAT-0010 ganha o status "Substituída pela PLAT-0018 e pela FOLHA-0016".
-- **Bloqueia:** nada; só a clareza de onde propor mudança no modelo de vínculo.
-
 ### A-15. `chave_vigencia: "mes_do_evento"` na PLAT-0003
 
 - **Contexto:** a ASP-0008 (item 6) usa uma terceira chave de vigência, o mês em que o evento
@@ -94,7 +85,7 @@ Em PR de cada repositório (as PLAT-0016 a 0022 foram aceitas em 12/11/2026):
 - **todos** (PLAT-0016; passos conferidos num projeto mínimo, detalhe em
   [`src/blatt/README.md`](../src/blatt/README.md)):
   - `uv add "blatt-plataforma @ git+https://github.com/marcellohalfeld/assembleia@v0.1.0"`
-    (tag já marcada) ou, depois da A-19, `@v0.2.0`; com adaptador web,
+    (tag já marcada) ou `@v0.2.0`; com adaptador web,
     `"blatt-plataforma[web] @ ...@v0.2.0"`;
   - apagar `src/blatt/comum/`, `src/blatt/infra/` e `src/blatt/__init__.py`; trocar
     `src/blatt/py.typed` por um `py.typed` em cada subpacote do módulo;
@@ -128,7 +119,7 @@ Em PR de cada repositório (as PLAT-0016 a 0022 foram aceitas em 12/11/2026):
   hash do arquivo de originais (PLAT-0022);
 - **`oper`:** ADRs `OPER-` de implantação, entregador, portal e backup (PLAT-0019 a 0022).
 
-O que cada repositório faz para **adotar a 0.2.0** (depois da A-19; API em
+O que cada repositório faz para **adotar a 0.2.0** (tag marcada em 13/11/2026; API em
 [`src/blatt/README.md`](../src/blatt/README.md)):
 
 - **todos:** ler `BLATT_DIR_ARQUIVO`, `BLATT_DIR_DADOS` e `BLATT_DIR_PARAMETROS` só por
@@ -163,39 +154,64 @@ O que cada repositório faz para **adotar a 0.2.0** (depois da A-19; API em
   `http://localhost:8000/saude`; `BLATT_WEB_NAVEGACAO` no `environment` dos módulos; o
   provisionamento continua dando `CONNECT` e `USAGE` em `public` aos papéis de operação.
 
-### A-19. Marcar a tag `v0.2.0` do `blatt-plataforma`
+### A-21. Wiki normativa: publicar as regras e os parâmetros que os módulos já guardam
 
-- **Hoje:** a versão 0.2.0 (arquivo imutável, configuração das pastas, conferência das
-  migrações, fatos e base web) está no branch `claude/elegant-lamport-wr5gbr`, sem tag.
-- **Falta:** depois do merge em `main`, o Marcello marca e envia a tag no commit de `main`
-  (`git tag v0.2.0` e `git push origin v0.2.0`).
-- **Bloqueia:** a adoção da 0.2.0 pelos módulos e pelo `oper` (A-17, segunda lista).
+- **Origem:** etapa C3 e pendência A-10 do "plano de convergência" de 08/11/2026 (PR #2 deste
+  repositório, fechado em 13/11/2026 por ter sido superado pelas PLAT-0016 a PLAT-0022). É a
+  única parte daquele plano que as ADRs aceitas não cobrem.
+- **Contexto:** a folha já guarda as normas de forma estruturada (`parametros/tabelas/`, com
+  valor, vigência, base legal e hash; `docs/dominio/regras/`, com regra, interpretação adotada
+  e casos-ouro), e o aspirador começou a fazer o mesmo. Uma wiki escrita à mão seria mais uma
+  cópia que diverge.
+- **Proposta (do plano de 08/11, a rever):** ADR `PLAT-` que faça desses formatos um contrato de
+  todos os módulos e defina a wiki como páginas geradas a partir deles, separando norma (link
+  oficial), parâmetro (valor, vigência, hash) e interpretação adotada (quem decidiu, quando, com
+  que fonte). Com a PLAT-0021, o lugar natural é o portal ou uma página de cada módulo, com o
+  mesmo login, em vez de um repositório novo.
+- **Decisão aberta:** se a parte normativa pode ser publicada fora da instância (D5 do plano).
+- **Bloqueia:** nada; é entrega nova, a priorizar pelo Marcello.
 
-### A-20. Entrega de fatos: `ON CONFLICT` da `inbox` e o `ultimo_id` do cursor (PLAT-0019)
+### A-22. Tag `v0.3.0` (certificado A1 em memória) e adoção pela folha e pelo aspirador
 
-Dois pontos em que a implementação da 0.2.0 (`blatt.infra.fatos`) completa a PLAT-0019 sem
-mudar o sentido dela; ficam para o Marcello confirmar, e depois na ADR `OPER-` do entregador.
-
-- **(a) `ON CONFLICT` sem alvo.** O item 5 escreve `INSERT … ON CONFLICT (id) DO NOTHING` e o
-  item 9 dá ao `blatt_entregador` só `INSERT` na `inbox`. Conferido no PostgreSQL 16.15: com alvo
-  explícito (`ON CONFLICT (id)` ou `ON CONSTRAINT`), o PostgreSQL exige também `SELECT` na coluna
-  do alvo ("permission denied for table"); sem alvo (`ON CONFLICT DO NOTHING`), basta `INSERT`.
-  **Feito:** a `inbox` de referência tem o `id` como única chave única, e o entregador usa
-  `ON CONFLICT DO NOTHING`, que nela tem o mesmo efeito (repetição pelo `id` é ignorada). Custo:
-  a `inbox` não pode ganhar outra chave única (uma repetição nela seria ignorada calada); por
-  isso a `UNIQUE (origem, sequencia_origem)` que se pensou não existe, e a origem restaurada é
-  detectada pelo cursor (item b). **Alternativa:** dar `SELECT (id)` na `inbox` ao entregador,
-  que muda o item 9 e exigiria ADR `PLAT-` nova.
-- **(b) Coluna `ultimo_id` na `entrega_cursor`.** O item 6 lista origem, última sequência e
-  instante. A implementação guarda também o `id` do último fato entregue: antes de ler adiante,
-  o entregador confere que a origem ainda tem esse fato nessa sequência; se não tem (origem
-  restaurada de cópia anterior, inclusive com a sequência reusada por outro fato), para com
-  `ErroOrigemRestaurada`, sem entregar nem mexer no cursor, como pedem as Consequências da
-  PLAT-0019. Só com a sequência, uma origem restaurada que já tivesse publicado de novo além do
-  cursor passaria calada.
-- **Bloqueia:** nada no código; o primeiro consumidor (provavelmente o `fiscal.escrituracao`)
-  copia o DDL de referência. Se o Marcello preferir a alternativa de (a), muda o DDL e o `INSERT`
-  antes disso.
+- **Contexto (14/11/2026):** a versão 0.3.0 do pacote traz `blatt.infra.certificado`, no extra
+  `[certificado]` (`cryptography`): `abrir_pkcs12` (abre o `.pfx` em memória, confere forma,
+  tamanho e validade, sem regra de negócio), `contexto_tls_cliente` (TLS mútuo pelo `ssl` da
+  biblioteca padrão, carregado por `os.memfd_create` em `/proc/self/fd/N`) e `pem_em_memoria`.
+  Generaliza o `contexto_tls` do aspirador (P-42, ASP-0009 de lá) e serve à fase 3 da web da
+  folha (assinar e enviar ao eSocial com o `.pfx` do formulário). API em
+  [`src/blatt/README.md`](../src/blatt/README.md).
+- **Depois do merge:** o Marcello marca a tag `v0.3.0` no commit de `main` (`git tag v0.3.0` e
+  `git push origin v0.3.0`).
+- **Depois da tag, por PR de cada repositório, no ritmo de cada um:**
+  - **folha:** subir para `"blatt-plataforma[web,certificado] @ ...@v0.3.0"`; no
+    `TransporteHttps` (`adaptadores/esocial/webservice.py`), trocar
+    `_carregar_certificado_cliente`, que hoje grava a chave cifrada num diretório temporário
+    mesmo no Linux, por `contexto_tls_cliente(credencial, cafile=cadeia_servidor)` (o `cafile`
+    mantém a FOLHA-0013: só a cadeia conferida, sem as raízes do sistema); a assinatura continua
+    na folha, com `credencial.chave` e `credencial.certificado` (a exigência de chave RSA fica
+    no módulo);
+  - **aspirador:** subir para `[web,certificado]@v0.3.0` e trocar `Credencial.de_pkcs12` e
+    `contexto_tls` (`adaptadores/adn.py`) pelo pacote, mantendo no módulo `conferir_raiz` e
+    `cnpj_do_certificado`.
+- **Para o Marcello decidir:**
+  - (a) **linha de comando no macOS.** O pacote não tem plano B: sem `memfd_create`, levanta
+    `ErroSemMemoriaAnonima` e não grava arquivo temporário (é o que a PLAT-0020, item 5.1, pede
+    na instância). O aspirador, no Mac, hoje cai num diretório 0700 com a chave cifrada por
+    senha aleatória, apagado em seguida (P-42 de lá), e a folha faz o mesmo em qualquer sistema.
+    **Proposta:** o pacote fica sem plano B; quem precisar rodar a linha de comando no Mac
+    mantém o diretório temporário no adaptador de linha de comando do próprio módulo, fora da
+    instância, registrado na ADR dele (ASP-0009, item 4; na folha, uma `FOLHA-`). Não exige
+    mudar a PLAT-0020 nem a PLAT-0021: na instância (Linux, container) nada vai para disco;
+  - (b) **validade:** `abrir_pkcs12` recusa certificado vencido ou ainda não válido pelo relógio
+    do servidor (`agora` pode ser informado). A folha e o aspirador hoje não conferem; com a
+    adoção, um A1 vencido passa a ser recusado antes da conexão, e não pelo servidor do governo.
+    **Proposta:** aceitar assim;
+  - (c) **`cnpj_do_certificado`** (leitura do `otherName` 2.16.76.1.3.3, DOC-ICP-04, a
+    conferir) está igual na folha e no aspirador. É leitura do formato ICP-Brasil, não regra
+    de negócio de um módulo. **Proposta:** levar ao pacote numa versão seguinte, ao lado de
+    `abrir_pkcs12`, deixando a comparação com o CNPJ consultado (raiz, transmissor) em cada
+    módulo.
+- **Bloqueia:** a adoção da 0.3.0 pelos módulos e a fase 3 da web da folha.
 
 ## Resolvidas
 
@@ -219,3 +235,7 @@ mudar o sentido dela; ficam para o Marcello confirmar, e depois na ADR `OPER-` d
 | 2026-11-12 | **Direção da reorganização** dada pelo Marcello: repositórios separados (monorepo descartado), `oper` como operação da instância, entregador no lugar do orquestrador, servidor doméstico com Docker Compose e acesso só pela rede local, interface web, backup em três camadas com restic para disco local e Google Drive, cadastro geral centralizado com os dados sensíveis dos trabalhadores só na folha. | PLAT-0016 a PLAT-0022 (aceitas em 12/11/2026) |
 | 2026-11-13 | **A-18** (tag `v0.1.0`): marcada pelo Marcello em `main` (`f05bdb6`) e enviada. | `git ls-remote --tags origin` (13/11/2026) |
 | 2026-11-13 | **P-65 da folha, itens (a), (b) e (d)**, do lado do pacote: `dir_arquivo`, `dir_dados`, `dir_parametros` em `blatt.infra.configuracao`; `conferir()` nas migrações; `blatt.infra.arquivo.ArquivoImutavel`. A adoção na folha e o item (c), no `oper`, seguem na A-17. | [`src/blatt/README.md`](../src/blatt/README.md), versão 0.2.0 |
+| 2026-11-13 | **A-19** (tag `v0.2.0`): marcada pelo Marcello em `main` (`5a3091d`, merge do PR #4) e enviada. | `git ls-remote --tags origin` (13/11/2026) |
+| 2026-11-13 | **Plano de convergência de 08/11/2026 (PR #2) fechado sem merge**, a pedido do Marcello: as etapas C0, C1, C2, C4, C5 e C7 foram decididas de outra forma nas PLAT-0016 a PLAT-0022 (pacote no lugar das cópias, operação no `oper`, adaptador web por módulo no lugar de API e repositório de interface, entregador no lugar do orquestrador); a C6 é a A-10; a C8 é a A-09; a C3 (wiki normativa) virou a A-21. | A-21; PLAT-0016 a PLAT-0022 |
+| 2026-11-13 | **A-20 confirmada** pelo Marcello ("a-20 confirmada como está no pacote"): (a) a entrega usa `ON CONFLICT DO NOTHING` sem alvo, sobre uma `inbox` cuja única chave única é o `id`, porque o alvo explícito do item 5 da PLAT-0019 exigiria `SELECT` na coluna e o item 9 dá ao entregador só `INSERT`; a `inbox` não ganha outra chave única; (b) a `entrega_cursor` guarda também o `ultimo_id`, que permite detectar a origem restaurada. | `blatt.infra.fatos` (`ddl.py`, `entrega.py`), tag `v0.2.0`; OPER-0006 do `oper` |
+| 2026-11-13 | **A-14:** a FOLHA-0016 (vínculo, contrato e afastamento da folha) foi escrita no `blatt` e aceita pelo Marcello ("pode marcar como aprovadas as ADRs"); a PLAT-0010 passa a **Substituída** pela PLAT-0018 e pela FOLHA-0016. As três divergências entre o texto trazido da PLAT-0010 e o código ficam na P-63 do `blatt`. | [PLAT-0010](adr/PLAT-0010-vinculos-e-dados-pessoais.md); [FOLHA-0016](https://github.com/marcellohalfeld/blatt/blob/main/docs/adr/0016-vinculo-contrato-e-afastamento.md) |

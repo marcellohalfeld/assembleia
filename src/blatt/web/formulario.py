@@ -17,7 +17,9 @@ O corpo já foi lido para a memória pelo *middleware* de CSRF (``blatt.web.segu
 do ``limite_corpo`` da aplicação; aqui ele é separado em partes com o analisador do
 ``python-multipart`` (o mesmo do Starlette), sem passar por arquivo. O Python não garante
 apagar a memória; o certificado deixa de existir quando o objeto deixa de ser referenciado, ao
-fim da requisição. O ``repr`` nunca mostra conteúdo nem senha.
+fim da requisição. O ``repr`` nunca mostra conteúdo nem senha. Para abrir o ``.pfx``, assinar
+e montar o TLS mútuo sem disco: ``blatt.infra.certificado`` (extra ``[certificado]``), por
+exemplo ``abrir_pkcs12(certificado.conteudo, certificado.senha)``.
 """
 
 from collections.abc import Awaitable, Callable, Mapping

@@ -4,8 +4,8 @@ Repete, lendo os imports do código, os contratos do ``import-linter`` em ``pypr
 de ``blatt``, só ``blatt.comum``, ``blatt.infra`` e ``blatt.web`` podem ser importados (nunca um
 módulo de negócio); ``blatt.comum`` não importa ``blatt.infra`` nem ``blatt.web``;
 ``blatt.infra`` não importa ``blatt.web``; ``blatt.web.apresentacao`` não depende do extra
-``[web]``. Também confere que ``blatt`` continua *namespace package* (sem
-``src/blatt/__init__.py``).
+``[web]``; em ``blatt.infra``, só ``certificado`` depende do extra ``[certificado]``. Também
+confere que ``blatt`` continua *namespace package* (sem ``src/blatt/__init__.py``).
 """
 
 import ast
@@ -70,6 +70,15 @@ def test_infra_nao_importa_web(arquivo: Path) -> None:
     importados = _importados(arquivo)
     assert not any(n.startswith("blatt.web") for n in importados)
     assert not any(n.split(".")[0] in EXTRA_WEB for n in importados)
+
+
+@pytest.mark.parametrize(
+    "arquivo",
+    sorted(p for p in (SRC / "blatt" / "infra").rglob("*.py") if p.name != "certificado.py"),
+    ids=lambda p: str(p.relative_to(SRC)),
+)
+def test_infra_so_o_certificado_depende_do_extra_certificado(arquivo: Path) -> None:
+    assert not any(n.split(".")[0] == "cryptography" for n in _importados(arquivo))
 
 
 @pytest.mark.parametrize(
