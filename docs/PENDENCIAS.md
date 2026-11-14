@@ -59,15 +59,6 @@ repositório dele.
   aviso de licenças na distribuição, como a PLAT-0008 já faz para o psycopg).
 - **Bloqueia:** nada no código; esclarece a política de licenças para as imagens da PLAT-0020.
 
-### A-14. FOLHA-0016: modelo de vínculo e contrato da folha
-
-- **Contexto:** a parte da PLAT-0010 que é só da folha (vínculo, contrato, afastamento,
-  formato `jsonb`, recibo do eSocial, seção "Implementação") não foi substituída pela
-  PLAT-0018 e continua valendo na PLAT-0010.
-- **Proposta:** uma sessão do `blatt` escreve a FOLHA-0016 com esse conteúdo, sem mudar o
-  sentido, e a PLAT-0010 ganha o status "Substituída pela PLAT-0018 e pela FOLHA-0016".
-- **Bloqueia:** nada; só a clareza de onde propor mudança no modelo de vínculo.
-
 ### A-15. `chave_vigencia: "mes_do_evento"` na PLAT-0003
 
 - **Contexto:** a ASP-0008 (item 6) usa uma terceira chave de vigência, o mês em que o evento
@@ -205,3 +196,4 @@ O que cada repositório faz para **adotar a 0.2.0** (tag marcada em 13/11/2026; 
 | 2026-11-13 | **A-19** (tag `v0.2.0`): marcada pelo Marcello em `main` (`5a3091d`, merge do PR #4) e enviada. | `git ls-remote --tags origin` (13/11/2026) |
 | 2026-11-13 | **Plano de convergência de 08/11/2026 (PR #2) fechado sem merge**, a pedido do Marcello: as etapas C0, C1, C2, C4, C5 e C7 foram decididas de outra forma nas PLAT-0016 a PLAT-0022 (pacote no lugar das cópias, operação no `oper`, adaptador web por módulo no lugar de API e repositório de interface, entregador no lugar do orquestrador); a C6 é a A-10; a C8 é a A-09; a C3 (wiki normativa) virou a A-21. | A-21; PLAT-0016 a PLAT-0022 |
 | 2026-11-13 | **A-20 confirmada** pelo Marcello ("a-20 confirmada como está no pacote"): (a) a entrega usa `ON CONFLICT DO NOTHING` sem alvo, sobre uma `inbox` cuja única chave única é o `id`, porque o alvo explícito do item 5 da PLAT-0019 exigiria `SELECT` na coluna e o item 9 dá ao entregador só `INSERT`; a `inbox` não ganha outra chave única; (b) a `entrega_cursor` guarda também o `ultimo_id`, que permite detectar a origem restaurada. | `blatt.infra.fatos` (`ddl.py`, `entrega.py`), tag `v0.2.0`; OPER-0006 do `oper` |
+| 2026-11-13 | **A-14:** a FOLHA-0016 (vínculo, contrato e afastamento da folha) foi escrita no `blatt` e aceita pelo Marcello ("pode marcar como aprovadas as ADRs"); a PLAT-0010 passa a **Substituída** pela PLAT-0018 e pela FOLHA-0016. As três divergências entre o texto trazido da PLAT-0010 e o código ficam na P-63 do `blatt`. | [PLAT-0010](adr/PLAT-0010-vinculos-e-dados-pessoais.md); [FOLHA-0016](https://github.com/marcellohalfeld/blatt/blob/main/docs/adr/0016-vinculo-contrato-e-afastamento.md) |
