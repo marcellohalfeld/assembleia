@@ -193,7 +193,7 @@ Ver [PENDENCIAS](PENDENCIAS.md): aceite das PLAT-0001 a 0004 (A-06),
 desenho do cadastro (A-09), guarda do A1 para coleta agendada (A-10), prazos legais de guarda
 (A-12), licenças do software de sistema nas imagens (A-13), FOLHA-0016 (A-14), `mes_do_evento`
 (A-15), branch padrão do aspirador (A-16), levar a reorganização aos módulos e adotar a 0.2.0
-(A-17), `ON CONFLICT` da `inbox` e coluna `ultimo_id` do cursor (A-20), wiki normativa (A-21).
+(A-17), wiki normativa (A-21).
 
 ## 10. Implementação de referência
 

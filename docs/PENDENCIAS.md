@@ -163,32 +163,6 @@ O que cada repositório faz para **adotar a 0.2.0** (tag marcada em 13/11/2026; 
   `http://localhost:8000/saude`; `BLATT_WEB_NAVEGACAO` no `environment` dos módulos; o
   provisionamento continua dando `CONNECT` e `USAGE` em `public` aos papéis de operação.
 
-### A-20. Entrega de fatos: `ON CONFLICT` da `inbox` e o `ultimo_id` do cursor (PLAT-0019)
-
-Dois pontos em que a implementação da 0.2.0 (`blatt.infra.fatos`) completa a PLAT-0019 sem
-mudar o sentido dela; ficam para o Marcello confirmar, e depois na ADR `OPER-` do entregador.
-
-- **(a) `ON CONFLICT` sem alvo.** O item 5 escreve `INSERT … ON CONFLICT (id) DO NOTHING` e o
-  item 9 dá ao `blatt_entregador` só `INSERT` na `inbox`. Conferido no PostgreSQL 16.15: com alvo
-  explícito (`ON CONFLICT (id)` ou `ON CONSTRAINT`), o PostgreSQL exige também `SELECT` na coluna
-  do alvo ("permission denied for table"); sem alvo (`ON CONFLICT DO NOTHING`), basta `INSERT`.
-  **Feito:** a `inbox` de referência tem o `id` como única chave única, e o entregador usa
-  `ON CONFLICT DO NOTHING`, que nela tem o mesmo efeito (repetição pelo `id` é ignorada). Custo:
-  a `inbox` não pode ganhar outra chave única (uma repetição nela seria ignorada calada); por
-  isso a `UNIQUE (origem, sequencia_origem)` que se pensou não existe, e a origem restaurada é
-  detectada pelo cursor (item b). **Alternativa:** dar `SELECT (id)` na `inbox` ao entregador,
-  que muda o item 9 e exigiria ADR `PLAT-` nova.
-- **(b) Coluna `ultimo_id` na `entrega_cursor`.** O item 6 lista origem, última sequência e
-  instante. A implementação guarda também o `id` do último fato entregue: antes de ler adiante,
-  o entregador confere que a origem ainda tem esse fato nessa sequência; se não tem (origem
-  restaurada de cópia anterior, inclusive com a sequência reusada por outro fato), para com
-  `ErroOrigemRestaurada`, sem entregar nem mexer no cursor, como pedem as Consequências da
-  PLAT-0019. Só com a sequência, uma origem restaurada que já tivesse publicado de novo além do
-  cursor passaria calada.
-- **Bloqueia:** nada no código; o primeiro consumidor (provavelmente o `fiscal.escrituracao`)
-  copia o DDL de referência. Se o Marcello preferir a alternativa de (a), muda o DDL e o `INSERT`
-  antes disso.
-
 ### A-21. Wiki normativa: publicar as regras e os parâmetros que os módulos já guardam
 
 - **Origem:** etapa C3 e pendência A-10 do "plano de convergência" de 08/11/2026 (PR #2 deste
@@ -230,3 +204,4 @@ mudar o sentido dela; ficam para o Marcello confirmar, e depois na ADR `OPER-` d
 | 2026-11-13 | **P-65 da folha, itens (a), (b) e (d)**, do lado do pacote: `dir_arquivo`, `dir_dados`, `dir_parametros` em `blatt.infra.configuracao`; `conferir()` nas migrações; `blatt.infra.arquivo.ArquivoImutavel`. A adoção na folha e o item (c), no `oper`, seguem na A-17. | [`src/blatt/README.md`](../src/blatt/README.md), versão 0.2.0 |
 | 2026-11-13 | **A-19** (tag `v0.2.0`): marcada pelo Marcello em `main` (`5a3091d`, merge do PR #4) e enviada. | `git ls-remote --tags origin` (13/11/2026) |
 | 2026-11-13 | **Plano de convergência de 08/11/2026 (PR #2) fechado sem merge**, a pedido do Marcello: as etapas C0, C1, C2, C4, C5 e C7 foram decididas de outra forma nas PLAT-0016 a PLAT-0022 (pacote no lugar das cópias, operação no `oper`, adaptador web por módulo no lugar de API e repositório de interface, entregador no lugar do orquestrador); a C6 é a A-10; a C8 é a A-09; a C3 (wiki normativa) virou a A-21. | A-21; PLAT-0016 a PLAT-0022 |
+| 2026-11-13 | **A-20 confirmada** pelo Marcello ("a-20 confirmada como está no pacote"): (a) a entrega usa `ON CONFLICT DO NOTHING` sem alvo, sobre uma `inbox` cuja única chave única é o `id`, porque o alvo explícito do item 5 da PLAT-0019 exigiria `SELECT` na coluna e o item 9 dá ao entregador só `INSERT`; a `inbox` não ganha outra chave única; (b) a `entrega_cursor` guarda também o `ultimo_id`, que permite detectar a origem restaurada. | `blatt.infra.fatos` (`ddl.py`, `entrega.py`), tag `v0.2.0`; OPER-0006 do `oper` |
