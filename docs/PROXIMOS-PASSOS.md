@@ -12,7 +12,7 @@ A fonte de verdade de cada repositório continua sendo o `docs/ROADMAP.md` ("ond
 
 | Repositório | Estado em 17/11/2026 | Em aberto |
 | --- | --- | --- |
-| `assembleia` | `main` com o pacote `blatt-plataforma` 0.3.0 (tag `v0.3.0`): `blatt.comum`, `blatt.infra` (configuração, arquivo imutável, migrações, fatos, certificado A1 em memória), `blatt.web`. PLAT-0016 a 0022 aceitas. | Branch `claude/elegant-lamport-wr5gbr` tem dois commits só de documentação fora do `main` (andamento da A-22 e este plano), sem PR. |
+| `assembleia` | `main` com o pacote `blatt-plataforma` 0.3.0 (tag `v0.3.0`): `blatt.comum`, `blatt.infra` (configuração, arquivo imutável, migrações, fatos, certificado A1 em memória), `blatt.web`. PLAT-0016 a 0022 aceitas. | [PR 6](https://github.com/marcellohalfeld/assembleia/pull/6): só documentação (andamento da A-22 e este plano). |
 | `blatt` (folha) | [PR 28](https://github.com/marcellohalfeld/blatt/pull/28) aberto contra `main`: pacote v0.3.0, imagem, arquivo imutável, web completa dos periódicos (carga, conferir, transmitir, consultar, reenviar, fechar, reabrir, pagamentos da implantação), folha conferida (FOLHA-0021), dossiê, cálculo do 13º só no domínio. 1158 testes, 2 pulados. Migrações 0001 a 0010. | **[PR 27](https://github.com/marcellohalfeld/blatt/pull/27) também aberto contra `main`** (ver a frente A). FOLHA-0026 proposta (P-84). P-85 (13º). |
 | `aspirador` | [PR 14](https://github.com/marcellohalfeld/aspirador/pull/14) aberto contra `claude/admiring-mendel-vilgsf` (o branch padrão; não há `main`): pacote v0.3.0, imagem, web `/fiscal`, dossiê, A1 pelo pacote (só Linux). 187 testes. | P-47 (ADR curta para a ASP-0009), P-29 (primeira execução real), A-16 (branch padrão). |
 | `oper` | Só existe o branch `claude/elegant-lamport-wr5gbr` (não há `main`, logo não há PR possível): Compose, provisionamento, backup e restauração, entregador de fatos, portal. OPER-0001 a 0007 aceitas. | O-02 (montar o servidor), O-08, O-09, O-10. |
@@ -77,9 +77,16 @@ dois como estão.
 4. Só depois da decisão: fazer a junção num branch só, com a sequência completa passando, sem
    perder teste de nenhum dos dois lados.
 
-**Cuidado.** O PR 27 mexe em `folha_do_banco.py`, `folha_mensal.py`, `eventos_periodicos.py` e
-`rubricas.py`, que o PR 28 também mudou (folha conferida, transmissão). O conflito é real; a
+**Conflitos conferidos em 17/11/2026** (`git merge-tree` do PR 27 sobre o PR 28): sete arquivos.
+Três existem nos dois lados com conteúdo diferente (`src/blatt/folha/dominio/decimo_terceiro.py`,
+`tests/test_decimo_terceiro.py`, `docs/dominio/regras/decimo-terceiro.md`); dois são de código
+alterado pelos dois (`adaptadores/esocial/cli.py`, `aplicacao/eventos_periodicos.py`); dois são
+documentação (`docs/PENDENCIAS.md`, `docs/ROADMAP.md`). `folha_do_banco.py`, `folha_mensal.py`
+e `rubricas.py` juntam sem conflito de texto, o que não prova que o resultado esteja certo: a
 prova de que nada mudou no cálculo mensal são os testes e a comparação de XML do PR 28.
+
+**Ordem dos merges.** O PR 28 entra primeiro (não tem conflito com o `main`). O PR 27 fica
+aberto e passa a conflitar com o `main`; é resolvido nesta frente, não no botão do GitHub.
 
 ### B. Folha: fechar o PR 28
 
@@ -136,7 +143,6 @@ web não guardam. O `docs/visao.md` promete trilha de auditoria completa.
 
 ### F. `assembleia`
 
-- Abrir PR com os commits de documentação do branch de trabalho (A-22 e este plano).
 - A-22 (c): levar `cnpj_do_certificado` ao pacote (versão 0.4.0), se o Marcello concordar.
 - Ajustar a redação "a web chama os mesmos casos de uso da CLI" (PLAT-0021, item 1, e os
   `CLAUDE.md` dos módulos), que pressupõe a linha de comando: proposta de ADR ou nota, à escolha
