@@ -211,7 +211,14 @@ O que cada repositório faz para **adotar a 0.2.0** (tag marcada em 13/11/2026; 
     de negócio de um módulo. **Proposta:** levar ao pacote numa versão seguinte, ao lado de
     `abrir_pkcs12`, deixando a comparação com o CNPJ consultado (raiz, transmissor) em cada
     módulo.
-- **Bloqueia:** a adoção da 0.3.0 pelos módulos e a fase 3 da web da folha.
+- **Andamento (14/11/2026):** o PR 5 foi mesclado e a tag `v0.3.0` foi marcada pelo Marcello
+  no commit `4d2bd50` de `main`. Sobre (a), o Marcello decidiu: "pode considerar tudo no Linux
+  a partir de agora; a fase de testes no Mac já passou" e, na folha, a linha de comando "era um
+  artifício do MVP": o pacote fica sem plano B e os módulos não precisam mantê-lo. A adoção no
+  aspirador está em curso (PR 14 de lá); na folha, entra com a fase 3 da web (FOLHA-0023).
+  Continuam abertos (b) e (c).
+- **Bloqueia:** (b) e (c) não bloqueiam nada; a adoção segue com a proposta de (b), que é o
+  comportamento do pacote.
 
 ## Resolvidas
 
